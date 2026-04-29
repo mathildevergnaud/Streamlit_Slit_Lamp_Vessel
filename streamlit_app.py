@@ -5,10 +5,10 @@ from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 
 import torch
 
-
-def load_model():
-    model.load_state_dict(torch.load("model.ckpt"))
-    model.eval()
+@st.cache_resource
+def load_model(device):
+    net = torch.load("model.pt", map_location=device)
+    net.eval()
 
     return model
 
@@ -41,12 +41,13 @@ selected_image = None
 if image_names:
     selected_image = st.sidebar.radio("Select an image", image_names)
 
-    model = load_model()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = load_model(device)
 
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
     model.to(device)
 
 # -------- Main Layout --------
