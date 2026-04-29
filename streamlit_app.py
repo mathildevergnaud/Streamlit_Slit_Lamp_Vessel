@@ -20,11 +20,11 @@ def build_model():
         dropout=0.2,
     )
 
+@st.cache_resource
 def load_model(device):
-    net = torch.load("model.pt", map_location=device)
+    net = build_model().to(device)
     net.eval()
-
-    return model
+    return net
 
 st.set_page_config(layout="wide")
 
