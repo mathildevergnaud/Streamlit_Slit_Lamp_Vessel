@@ -1,11 +1,25 @@
 import streamlit as st
 from PIL import Image
 
+from monai.networks.nets import DynUNet
+
 from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 
 import torch
 
 @st.cache_resource
+def build_model():
+    return DynUNet(
+        spatial_dims=2,
+        in_channels=3,
+        out_channels=1,
+        kernel_size=[(3, 3)] * 5,
+        strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
+        upsample_kernel_size=[(2, 2)] * 4,
+        norm_name="BATCH",
+        dropout=0.2,
+    )
+
 def load_model(device):
     net = torch.load("model.pt", map_location=device)
     net.eval()
