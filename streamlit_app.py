@@ -26,12 +26,15 @@ if uploaded_files:
 st.sidebar.title("Image List")
 image_names = list(st.session_state.images.keys())
 
-st.sidebar.button("Cornea_Segmentation"):
+if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
 selected_image = None
 if image_names:
     selected_image = st.sidebar.radio("Select an image", image_names)
+
+if st.sidebar.button("Cornea_Segmentation"):
+    st.sidebar.write("Button was clicked 🎉")
 
 # -------- Main Layout --------
 st.title("Image Viewer")
