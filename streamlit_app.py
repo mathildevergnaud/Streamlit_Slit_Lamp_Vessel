@@ -22,16 +22,17 @@ if uploaded_files:
         if file.name not in st.session_state.images:
             st.session_state.images[file.name] = Image.open(file)
 
-# Image selector
-st.sidebar.title("Image List")
-image_names = list(st.session_state.images.keys())
-
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
 selected_image = None
 if image_names:
     selected_image = st.sidebar.radio("Select an image", image_names)
+
+
+# Image selector
+st.sidebar.title("Image List")
+image_names = list(st.session_state.images.keys())
 
 # -------- Main Layout --------
 st.title("Image Viewer")
