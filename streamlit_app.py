@@ -1,6 +1,14 @@
 import streamlit as st
 from PIL import Image
 
+import torch
+
+
+def load_model():
+    model = torch.load("utils/cornea/model.pt")  # Replace with your model path
+    model.eval()  # Set to evaluation mode
+    return model
+
 st.set_page_config(layout="wide")
 
 # -------- Sidebar --------
@@ -30,8 +38,13 @@ selected_image = None
 if image_names:
     selected_image = st.sidebar.radio("Select an image", image_names)
 
+    model = load_model()
+
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
 
 # -------- Main Layout --------
 st.title("Image Viewer")
