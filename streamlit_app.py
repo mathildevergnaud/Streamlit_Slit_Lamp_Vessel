@@ -1,12 +1,15 @@
 import streamlit as st
 from PIL import Image
 
+from utils.train_monai_pl_v2 import EyeBVSegm
+
 import torch
 
 
 def load_model():
-    model = torch.load("utils/cornea/model.pt")  # Replace with your model path
-    model.eval()  # Set to evaluation mode
+    model.load_state_dict(torch.load("model.ckpt"))
+    model.eval()
+
     return model
 
 st.set_page_config(layout="wide")
