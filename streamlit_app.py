@@ -31,8 +31,8 @@ if image_names:
 
 
 # Image selector
-st.sidebar.title("Image List")
-image_names = list(st.session_state.images.keys())
+if st.sidebar.title("Image List")
+    image_names = list(st.session_state.images.keys())
 
 # -------- Main Layout --------
 st.title("Image Viewer")
