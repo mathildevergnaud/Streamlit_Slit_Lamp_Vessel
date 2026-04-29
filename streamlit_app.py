@@ -26,7 +26,7 @@ if uploaded_files:
 st.sidebar.title("Image List")
 image_names = list(st.session_state.images.keys())
 
-st.sidebar.button("Cornea_Segmentation"):
+if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
 selected_image = None
@@ -39,6 +39,7 @@ st.title("Image Viewer")
 if selected_image:
     image = st.session_state.images[selected_image]
     st.image(image, caption=selected_image, use_container_width=True)
+    
     
 
 
