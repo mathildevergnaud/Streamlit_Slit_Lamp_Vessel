@@ -37,5 +37,5 @@ if selected_image:
     image = st.session_state.images[selected_image]
     st.image(image, caption=selected_image, use_container_width=True)
     
-    st.subheader("Cornea Segmentation")
+    st.sidebar("Cornea Segmentation")
 
