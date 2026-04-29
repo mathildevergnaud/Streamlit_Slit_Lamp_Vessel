@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 
-from utils.train_monai_pl_v2 import EyeBVSegm
+from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 
 import torch
 
