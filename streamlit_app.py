@@ -6,6 +6,7 @@ from monai.networks.nets import DynUNet
 from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 
 import torch
+import torchvision.transforms as transforms
 
 @st.cache_resource
 def build_model():
@@ -25,6 +26,13 @@ def load_model(device):
     net = build_model().to(device)
     net.eval()
     return net
+
+
+def predict(mode, device):
+    size_im = [512,512]
+    transform = transforms.Compose([transforms.ToTensor()])
+
+    return 0
 
 st.set_page_config(layout="wide")
 
