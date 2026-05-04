@@ -81,11 +81,11 @@ if st.sidebar.button("Cornea_Segmentation"):
         im = torch.as_tensor(im.copy(), device=device).permute(2,0,1).unsqueeze(0)
         st.sidebar.write(im.shape)
 
-        try:
-            prediction = model(im)
-        except Exception as e:
-            st.error(str(e))
-            raise
+        # try:
+        #     prediction = model(im)
+        # except Exception as e:
+        #     st.error(str(e))
+        #     raise
     
 # -------- Main Layout --------
 st.title("Image Viewer")
