@@ -10,7 +10,7 @@ st.cache_resource.clear()
 
 def load_model(device):
     net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
+    #net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
     net.eval()
     return net
 
@@ -57,7 +57,7 @@ if st.sidebar.button("Cornea Segmentation"):
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
 
         print(im.shape)
-        pred = model(im)[0,0,:,:].cpu().detach().numpy().astype(np.uint8)*255.0
+        pred = model(im)[0,0,:,:].cpu().detach().numpy().astype(np.uint8)
         
         # Assuming model is loaded here
         # model = load_model()  # Placeholder for model loading
