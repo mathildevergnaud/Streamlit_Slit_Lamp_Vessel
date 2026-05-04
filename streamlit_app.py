@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from skimage.transform import resize  # assuming this is needed
+import torch
 
 st.cache_data.clear()
 st.cache_resource.clear()
