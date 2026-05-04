@@ -17,12 +17,7 @@ from torch.utils.data import DataLoader
 import torchvision
 
 from monai.networks.nets import UNet, DynUNet
-from monai.losses import HausdorffDTLoss
-from monai.losses import DiceLoss
-
 from monai.losses import TverskyLoss
-
-#from Dataset import split_lamp_Dataset as Dataset
 
 class EyeBVSegm(pl.LightningModule):
     def __init__(self,
