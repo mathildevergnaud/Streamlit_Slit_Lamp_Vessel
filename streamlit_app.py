@@ -66,7 +66,7 @@ if image_names:
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
- if selected_image is not None:
+if selected_image is not None:
     image = st.session_state.images[selected_image]
     # ensure numpy float32
     image = np.array(image).astype(np.float32)
@@ -80,7 +80,7 @@ if st.sidebar.button("Cornea_Segmentation"):
     # convert to tensor properly
     im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
     
-    pred = net(im)
+    pred = model(im)
     
     st.sidebar.write(im.shape)
     
