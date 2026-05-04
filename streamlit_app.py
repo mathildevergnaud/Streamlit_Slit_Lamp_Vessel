@@ -12,47 +12,50 @@ if "images" not in st.session_state:
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
 
-# Upload images
-uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
-if uploaded_files:
-    for file in uploaded_files:
-        img = Image.open(file)
-        st.session_state.images[file.name] = img
+# # Upload images
+# uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
+# if uploaded_files:
+#     for file in uploaded_files:
+#         img = Image.open(file)
+#         st.session_state.images[file.name] = img
 
-# Select an image
-selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
+# # Select an image
+# selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-# Process the selected image when the button is clicked
-if st.sidebar.button("Cornea Segmentation"):
-    if selected_image_key:
-        original_image = st.session_state.images[selected_image_key]
-        # Process the image through the model
-        img_array = np.array(original_image)
-        resized_img = resize(img_array, (512, 512))  # Ensure correct import
+# # Process the selected image when the button is clicked
+# if st.sidebar.button("Cornea Segmentation"):
+#     if selected_image_key:
+#         original_image = st.session_state.images[selected_image_key]
+#         # Process the image through the model
+#         img_array = np.array(original_image)
+#         resized_img = resize(img_array, (512, 512))  # Ensure correct import
         
-        # Assuming model is loaded here
-        # model = load_model()  # Placeholder for model loading
-        # output = model.predict(resized_img[np.newaxis, ...])  # Add batch dimension
-        # mask = (output[0, :, :, 0] > 0.5).astype(np.uint8) * 255  # Assuming binary segmentation
+#         # Assuming model is loaded here
+#         # model = load_model()  # Placeholder for model loading
+#         # output = model.predict(resized_img[np.newaxis, ...])  # Add batch dimension
+#         # mask = (output[0, :, :, 0] > 0.5).astype(np.uint8) * 255  # Assuming binary segmentation
         
-        # Example dummy mask (replace with actual prediction)
-        mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
+#         # Example dummy mask (replace with actual prediction)
+#         mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
         
-        segmented_image = Image.fromarray(mask)
-        st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
-    else:
-        st.sidebar.error("Please select an image first.")
+#         segmented_image = Image.fromarray(mask)
+#         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
+#     else:
+#         st.sidebar.error("Please select an image first.")
 
-# Display selected image and segmentation
-st.write("Selected Image:")
-if selected_image_key:
-    st.image(st.session_state.images[selected_image_key], caption="Original Image")
+# # Display selected image and segmentation
+# st.write("Selected Image:")
+# if selected_image_key:
+#     st.image(st.session_state.images[selected_image_key], caption="Original Image")
 
-st.write("Segmentation Result:")
-if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
-    st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
-else:
-    st.write("No segmentation result yet.")
+# st.write("Segmentation Result:")
+# if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+#     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
+# else:
+#     st.write("No segmentation result yet.")
+
+
+####################
 
 # import streamlit as st
 # from PIL import Image
