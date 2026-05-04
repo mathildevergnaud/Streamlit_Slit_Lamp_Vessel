@@ -27,6 +27,7 @@ def build_model():
 @st.cache_resource
 def load_model(device):
     net = build_model().to(device)
+    net.load_state_dict(torch.load("model.pt", map_location=device))
     net.eval()
     return net
 
