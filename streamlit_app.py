@@ -9,6 +9,7 @@ import torch
 import torchvision.transforms as transforms
 
 import skimage
+import numpy as np
 
 @st.cache_resource
 def build_model():
