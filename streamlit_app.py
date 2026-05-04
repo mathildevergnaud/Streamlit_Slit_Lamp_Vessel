@@ -47,7 +47,7 @@ if st.sidebar.button("Cornea Segmentation"):
     if selected_image_key:
         original_image = st.session_state.images[selected_image_key]
         # Process the image through the model
-        img_array = np.array(original_image)
+        img_array = np.array(original_image).astype(np.float32)
         resized_img = resize(img_array, (512, 512))  # Ensure correct import
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
