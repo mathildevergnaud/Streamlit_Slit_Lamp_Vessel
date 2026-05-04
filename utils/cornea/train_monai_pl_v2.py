@@ -32,20 +32,11 @@ class EyeBVSegm(pl.LightningModule):
         super().__init__()
 
         self.model = model
-
         self.num_classes = num_classes
-
         self.val_img_was_vis = False
-
-        self.loss_fn = DiceLoss(sigmoid=False) #True
-        self.lossHaus = HausdorffDTLoss(reduction='none')
         self.Twersky = TverskyLoss(include_background=True, sigmoid=True,
                                     alpha=0.3, beta=0.7, reduction="mean",
                                       smooth_nr=1.0, smooth_dr=1.0, batch=True)
-        #self.loss_haud = HausdorffDTLoss(simoid = True, batch = True)
-        #self.loss_haud = HausdorffDTLoss(simoid = True, batch = True)
-
-        #self.save_hyperparameters()
 
     def forward(self, x):
         return self.model(x)
