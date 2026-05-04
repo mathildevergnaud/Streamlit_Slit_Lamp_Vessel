@@ -11,9 +11,6 @@ import lightning.pytorch as pl
 SCRIPT_DIR = pathlib.Path(__file__).parent.resolve()
 os.chdir(SCRIPT_DIR)
 
-from pytorch_lightning.loggers import  WandbLogger
-from lightning.pytorch.callbacks import ModelCheckpoint
-
 import torch
 
 from torch.utils.data import DataLoader
