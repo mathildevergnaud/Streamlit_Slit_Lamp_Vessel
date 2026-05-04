@@ -81,6 +81,8 @@ if selected_image is not None:
     im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
     
     pred = model(im)
+
+    predict_im = pred[0,0,:,:].cpu().detach().numpy()
     
     st.sidebar.write(im.shape)
     
