@@ -8,6 +8,8 @@ from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 import torch
 import torchvision.transforms as transforms
 
+import skimage
+
 @st.cache_resource
 def build_model():
     return DynUNet(
@@ -69,8 +71,15 @@ if image_names:
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
+    im = skimage.transform.resize(selected_image, (512,512), anti_aliasing=True)
+    im = torch.as_tensor(im.copy(), device=model.device)
+
+    prediction = model(im)
+
     
-    model.to(device)
+    
+
+
 
 # -------- Main Layout --------
 st.title("Image Viewer")
