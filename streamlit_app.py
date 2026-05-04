@@ -53,7 +53,7 @@ if st.sidebar.button("Cornea Segmentation"):
         model = load_model(device)
         
         im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
-        pred = model(im)
+        pred = model(im)[0,0,:,:].cpu().detach().numpy().astype(np.uint8)
         
         # Assuming model is loaded here
         # model = load_model()  # Placeholder for model loading
@@ -61,9 +61,9 @@ if st.sidebar.button("Cornea Segmentation"):
         # mask = (output[0, :, :, 0] > 0.5).astype(np.uint8) * 255  # Assuming binary segmentation
         
         # Example dummy mask (replace with actual prediction)
-        mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
+        #mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
         
-        segmented_image = Image.fromarray(mask)
+        segmented_image = Image.fromarray(pred)
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
     else:
         st.sidebar.error("Please select an image first.")
