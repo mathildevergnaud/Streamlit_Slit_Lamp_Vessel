@@ -52,6 +52,9 @@ if st.sidebar.button("Cornea Segmentation"):
         
         model = load_model(device)
         
+        im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
+        pred = model(im)
+        
         # Assuming model is loaded here
         # model = load_model()  # Placeholder for model loading
         # output = model.predict(resized_img[np.newaxis, ...])  # Add batch dimension
