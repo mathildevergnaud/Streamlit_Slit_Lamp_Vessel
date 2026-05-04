@@ -3,7 +3,7 @@ from PIL import Image
 
 from monai.networks.nets import DynUNet
 
-from utils.cornea.train_monai_pl_v2 import EyeBVSegm
+#from utils.cornea.train_monai_pl_v2 import EyeBVSegm
 
 import torch
 import torchvision.transforms as transforms
