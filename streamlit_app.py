@@ -47,7 +47,7 @@ uploaded_files = st.sidebar.file_uploader(
     "Choose images",
     type=["png", "jpg", "jpeg"],
     accept_multiple_files=True
-)
+) 
 
 # Session state
 if "images" not in st.session_state:
