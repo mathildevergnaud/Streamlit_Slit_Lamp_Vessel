@@ -74,7 +74,7 @@ if st.sidebar.button("Cornea_Segmentation"):
 
     if selected_image : 
         image = st.session_state.images[selected_image]
-        image = np.array(im, dtype=np.float32)
+        image = np.array(image, dtype=np.float32)
         
         st.sidebar.write(type(image))
     
