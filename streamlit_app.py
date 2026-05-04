@@ -25,19 +25,12 @@ def build_model():
     )
 
 @st.cache_resource
-def load_model(device):
-    net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
-    net.eval()
-    return net
-
-
-def predict(mode, device):
-    size_im = [512,512]
-    transform = transforms.Compose([transforms.ToTensor()])
-
-    return 0
-
+# def load_model(device):
+#     net = build_model().to(device)
+#     net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
+#     net.eval()
+#     return net
+    
 st.set_page_config(layout="wide")
 
 # -------- Sidebar --------
