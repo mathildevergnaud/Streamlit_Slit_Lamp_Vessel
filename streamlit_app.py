@@ -80,7 +80,7 @@ if selected_image is not None:
     # convert to tensor properly
     im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
     
-    pred = net(im)
+    pred = model(im)
     
     st.sidebar.write(im.shape)
     
