@@ -3,6 +3,9 @@ from PIL import Image
 import numpy as np
 from skimage.transform import resize  # assuming this is needed
 
+st.cache_data.clear()
+st.cache_resource.clear()
+
 # Initialize session state
 if "images" not in st.session_state:
     st.session_state.images = {}
