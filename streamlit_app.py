@@ -83,6 +83,8 @@ if selected_image is not None:
     pred = model(im)
 
     predict_im = pred[0,0,:,:].cpu().detach().numpy()
+
+    #to_show = Image.fromarray(blank_image.astype(np.uint8)*255.0
     
     st.sidebar.write(im.shape)
     
