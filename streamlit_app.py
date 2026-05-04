@@ -125,18 +125,6 @@ else:
 # if st.sidebar.button("Cornea_Segmentation"):
 #     st.sidebar.write("Button was clicked 🎉")
 
-<<<<<<< HEAD
-if selected_image is not None:
-    image = st.session_state.images[selected_image]
-    # ensure numpy float32
-    image = np.array(image).astype(np.float32)
-    # resize
-    im = skimage.transform.resize(
-        image,
-        (512, 512),
-        anti_aliasing=True
-    ).astype(np.float32)
-=======
 # if selected_image is not None:
 #     image = st.session_state.images[selected_image]
 #     # ensure numpy float32
@@ -147,15 +135,24 @@ if selected_image is not None:
 #         (512, 512),
 #         anti_aliasing=True
 #     ).astype(np.float32)
->>>>>>> 761bed35b947395cf5a0cd9c189a8206cb84dca4
+
+# if selected_image is not None:
+#     image = st.session_state.images[selected_image]
+#     # ensure numpy float32
+#     image = np.array(image).astype(np.float32)
+#     # resize
+#     im = skimage.transform.resize(
+#         image,
+#         (512, 512),
+#         anti_aliasing=True
+#     ).astype(np.float32)
     
 #     # convert to tensor properly
 #     im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
+
+#     pred = model(im)
     
-<<<<<<< HEAD
-    pred = model(im)
-    
-    st.sidebar.write(im.shape)
+#     st.sidebar.write(im.shape)
     
     # try:
     #     prediction = model(im)
@@ -164,10 +161,9 @@ if selected_image is not None:
     #     raise
     
 # -------- Main Layout --------
-st.title("Image Viewer")
-=======
+#st.title("Image Viewer")
+
 #     pred = model(im)
->>>>>>> 761bed35b947395cf5a0cd9c189a8206cb84dca4
 
 #     #predict_im = pred[0,0,:,:].cpu().detach().numpy()
 
