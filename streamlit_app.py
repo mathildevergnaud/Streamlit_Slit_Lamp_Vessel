@@ -71,16 +71,16 @@ if image_names:
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
 
-    im = skimage.transform.resize(selected_image, (512,512), anti_aliasing=True)
-    im = torch.as_tensor(im.copy(), device=model.device)
-
-    prediction = model(im)
+    if selected_image : 
+        image = st.session_state.images[selected_image]
+        print((type(image))
+    
+        im = skimage.transform.resize(image, (512,512), anti_aliasing=True)
+        im = torch.as_tensor(im.copy(), device=model.device)
+    
+        prediction = model(im)
 
     
-    
-
-
-
 # -------- Main Layout --------
 st.title("Image Viewer")
 
