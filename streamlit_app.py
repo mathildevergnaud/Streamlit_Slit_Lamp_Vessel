@@ -75,11 +75,11 @@ if st.sidebar.button("Cornea_Segmentation"):
 
     if selected_image : 
         image = st.session_state.images[selected_image]
-        image = np.array(image, dtype=np.float32).permute(1,2,0)
+        image = np.array(image, dtype=np.float32)
         st.sidebar.write(image.shape)
         
         im = skimage.transform.resize(image, (512,512), anti_aliasing=True)
-        im = torch.as_tensor(im.copy(), device=device).unsqueeze(0)
+        im = torch.as_tensor(im.copy(), device=device).permute(1,2,0).unsqueeze(0)
 
     
         prediction = model(im)
