@@ -68,7 +68,7 @@ if st.sidebar.button("Cornea Segmentation"):
         #mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
         
         segmented_image = Image.fromarray(pred)
-        st.session_state.segmentations[selected_image_key + "_segmented"] = resized_image#segmented_image
+        st.session_state.segmentations[selected_image_key + "_segmented"] = resized_img#segmented_image
     else:
         st.sidebar.error("Please select an image first.")
 
