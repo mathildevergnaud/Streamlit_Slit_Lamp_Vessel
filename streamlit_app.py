@@ -24,14 +24,14 @@ def build_model():
         dropout=0.2,
     )
 
-@st.cache_resource
+#@st.cache_resource
 # def load_model(device):
 #     net = build_model().to(device)
 #     net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
 #     net.eval()
 #     return net
     
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 
 # -------- Sidebar --------
 st.sidebar.title("Upload Images")
