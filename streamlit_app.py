@@ -68,7 +68,7 @@ if image_names:
     selected_image = st.sidebar.radio("Select an image", image_names)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = load_model(device)
+    #model = load_model(device)
 
 if st.sidebar.button("Cornea_Segmentation"):
     st.sidebar.write("Button was clicked 🎉")
