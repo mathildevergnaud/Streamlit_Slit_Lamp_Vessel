@@ -1,16 +1,16 @@
-# import streamlit as st
-# from PIL import Image
-# import numpy as np
-# from skimage.transform import resize  # assuming this is needed
+import streamlit as st
+from PIL import Image
+import numpy as np
+from skimage.transform import resize  # assuming this is needed
 
-# st.cache_data.clear()
-# st.cache_resource.clear()
+st.cache_data.clear()
+st.cache_resource.clear()
 
-# # Initialize session state
-# if "images" not in st.session_state:
-#     st.session_state.images = {}
-# if "segmentations" not in st.session_state:
-#     st.session_state.segmentations = {}
+# Initialize session state
+if "images" not in st.session_state:
+    st.session_state.images = {}
+if "segmentations" not in st.session_state:
+    st.session_state.segmentations = {}
 
 # # Upload images
 # uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
