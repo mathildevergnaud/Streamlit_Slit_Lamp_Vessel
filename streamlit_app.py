@@ -78,7 +78,7 @@ if st.sidebar.button("Cornea_Segmentation"):
         image = np.array(image, dtype=np.float32)
         
         im = skimage.transform.resize(image, (512,512), anti_aliasing=True)
-        im = torch.as_tensor(im.copy(), device=device).permute(2,1,0).unsqueeze(0)
+        im = torch.as_tensor(im.copy(), device=device).permute(2,0,1).unsqueeze(0)
         st.sidebar.write(im.shape)
 
     
