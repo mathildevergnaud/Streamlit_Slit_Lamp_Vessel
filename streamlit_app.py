@@ -55,16 +55,8 @@ if st.sidebar.button("Cornea Segmentation"):
         #print(im.shape, im.dtype)
         #pred = (torch.sigmoid(model(im))>0.5).float()[0,0,:,:].cpu().detach().numpy().astype(np.uint8)*255
         
-        # Assuming model is loaded here
-        # model = load_model()  # Placeholder for model loading
-        # output = model.predict(resized_img[np.newaxis, ...])  # Add batch dimension
-        # mask = (output[0, :, :, 0] > 0.5).astype(np.uint8) * 255  # Assuming binary segmentation
-        
-        # Example dummy mask (replace with actual prediction)
-        #mask = np.random.randint(0, 256, size=(512, 512), dtype=np.uint8)  # Dummy data
-        
         segmented_image = Image.fromarray(pred)
-        st.session_state.segmentations[selected_image_key + "_segmented"] = resized_img#segmented_image
+        st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(resized_img)#segmented_image
     else:
         st.sidebar.error("Please select an image first.")
 
