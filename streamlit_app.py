@@ -55,6 +55,8 @@ if st.sidebar.button("Cornea Segmentation"):
         model = load_model(device)
         
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
+
+        print(im.shape)
         pred = model(im)[0,0,:,:].cpu().detach().numpy().astype(np.uint8)
         
         # Assuming model is loaded here
