@@ -26,29 +26,25 @@ def build_model():
         dropout=0.2,
     )
 
-# Initialize session state
 if "images" not in st.session_state:
     st.session_state.images = {}
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
-
-# Upload images
+    
 uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
 if uploaded_files:
     for file in uploaded_files:
         img = Image.open(file)
         st.session_state.images[file.name] = img
 
-# Select an image
 selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-# Process the selected image when the button is clicked
 if st.sidebar.button("Cornea Segmentation"):
     if selected_image_key:
         original_image = st.session_state.images[selected_image_key]
-        # Process the image through the model
+        
         img_array = np.array(original_image).astype(np.float32)
-        resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  # Ensure correct import
+        resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.uint8)  
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
