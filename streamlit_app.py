@@ -47,7 +47,7 @@ if st.sidebar.button("Cornea Segmentation"):
 
         st.sidebar.write(img_array[100,100,:])
         
-        resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.uint8)  
+        resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
         
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
