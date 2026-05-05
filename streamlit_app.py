@@ -72,7 +72,7 @@ if st.sidebar.button("Cornea Segmentation"):
         st.sidebar.write(pred.shape, pred.dtype)
         pred = (pred * 255).astype("uint8")
 
-        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uitn8)
+        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
         pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
