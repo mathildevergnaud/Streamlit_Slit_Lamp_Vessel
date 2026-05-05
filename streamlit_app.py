@@ -44,7 +44,11 @@ if st.sidebar.button("Cornea Segmentation"):
         original_image = st.session_state.images[selected_image_key]
         
         img_array = np.array(original_image).astype(np.float32)
+
+        st.sidebar.write(max(img_array)
+        
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.uint8)  
+        
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
@@ -140,7 +144,7 @@ else:
 #     model = load_model(device)
 
 # if st.sidebar.button("Cornea_Segmentation"):
-#     st.sidebar.write("Button was clicked 🎉")
+#     C
 
 # if selected_image is not None:
 #     image = st.session_state.images[selected_image]
