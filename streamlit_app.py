@@ -10,6 +10,8 @@ from monai.networks.nets import DynUNet
 
 import cv2
 
+import Vessel
+
 st.cache_data.clear()
 st.cache_resource.clear()
 
@@ -113,28 +115,31 @@ else:
 
 if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
-        st.session_state.vessel_mode = "menu"
-        st.sidebar.write("Choose option:")
-        
-        if st.sidebar.button("Option A"):
-            st.session_state.vessel_mode = "A"
+        st.session_state.page == "vessel":
+        vessel.run()
     
-        if st.sidebar.button("Option B"):
-            st.session_state.vessel_mode = "B"
+        # st.session_state.vessel_mode = "menu"
+        # st.sidebar.write("Choose option:")
+        
+        # if st.sidebar.button("Option A"):
+        #     st.session_state.vessel_mode = "A"
+    
+        # if st.sidebar.button("Option B"):
+        #     st.session_state.vessel_mode = "B"
 
-        if st.session_state.vessel_mode == "A":
-            st.sidebar.write("Please upload images")
+        # if st.session_state.vessel_mode == "A":
+        #     st.sidebar.write("Please upload images")
         
-            uploaded_file = st.sidebar.file_uploader(
-                "Upload image",
-                type=["jpg", "jpeg", "png"],
-                key="Mask_upload"
-            )
+        #     uploaded_file = st.sidebar.file_uploader(
+        #         "Upload image",
+        #         type=["jpg", "jpeg", "png"],
+        #         key="Mask_upload"
+        #     )
         
-            if uploaded_file is not None:
-                mask = Image.open(uploaded_file)
-                st.session_state.segmentations[selected_image_key + "_Mask"] = mask
-                st.success("Mask saved")
+        #     if uploaded_file is not None:
+        #         mask = Image.open(uploaded_file)
+        #         st.session_state.segmentations[selected_image_key + "_Mask"] = mask
+        #         st.success("Mask saved")
 
 
 ####################
