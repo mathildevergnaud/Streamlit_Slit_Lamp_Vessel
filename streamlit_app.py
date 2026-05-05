@@ -45,7 +45,7 @@ if st.sidebar.button("Cornea Segmentation"):
         
         img_array = np.array(original_image).astype(np.float32)
 
-        st.sidebar.write(max(img_array.all()))
+        st.sidebar.write(img_array[100,100,:])
         
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.uint8)  
         
