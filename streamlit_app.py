@@ -114,18 +114,13 @@ else:
 if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.session_state.vessel_mode = "menu"
+        st.sidebar.write("Choose option:")
         
         if st.sidebar.button("Option A"):
-            st.sidebar.write("Please add the bask on the images")
-            uploaded_files = st.sidebar.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png"])
-            
-            if uploaded_files:
-                for file in uploaded_files:
-                    Mask = Image.open(file)
-                    st.session_state.segmentations[selected_image_key + "_Mask"] = Mask
-        
+            st.session_state.vessel_mode = "A"
+    
         if st.sidebar.button("Option B"):
-            st.write("You selected B")
+            st.session_state.vessel_mode = "B"
 
 
 
