@@ -111,14 +111,13 @@ if selected_image_key and selected_image_key + "_cornea" in st.session_state.seg
 else:
     st.write("No segmentation result yet.")
 
-
 if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
-        st.sidebar.write('Vessel_Seg')
+        st.session_state.vessel_mode = "menu"
         
         if st.sidebar.button("Option A"):
-            st.write("Please add the bask on the images")
-            uploaded_files = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png"])
+            st.sidebar.write("Please add the bask on the images")
+            uploaded_files = st.sidebar.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png"])
             
             if uploaded_files:
                 for file in uploaded_files:
