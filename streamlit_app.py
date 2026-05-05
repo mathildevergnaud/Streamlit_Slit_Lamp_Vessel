@@ -97,6 +97,13 @@ if st.sidebar.button("Cornea Segmentation"):
 if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.sidebar.write('Vessel_Seg')
+        
+        choice = st.radio("Choose an option:", ["Option A", "Option B"])
+        if choice == "Option A":
+            st.write("You selected A")
+            
+        elif choice == "Option B":
+            st.write("You selected B")
 
 # Display selected image and segmentation
 st.write("Selected Image:")
