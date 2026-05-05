@@ -10,7 +10,7 @@ from monai.networks.nets import DynUNet
 
 import cv2
 
-import Vessel
+import Vessel as vessel
 
 st.cache_data.clear()
 st.cache_resource.clear()
