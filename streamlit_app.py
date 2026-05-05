@@ -60,7 +60,7 @@ if st.sidebar.button("Cornea Segmentation"):
         st.sidebar.write(pred.shape, pred.dtype)
         
         segmented_image = Image.fromarray(pred)
-        st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(segmented_image)#segmented_image
+        st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
     else:
         st.sidebar.error("Please select an image first.")
 
