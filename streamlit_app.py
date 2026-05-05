@@ -48,7 +48,7 @@ def Cornea_Crop(image, mask):
         mask = (mask > 0).astype("uint8") * 255
 
     result = cv2.bitwise_and(img, img, mask=mask)
-    return Image.fromarray(result)
+    return result
 
 if "images" not in st.session_state:
     st.session_state.images = {}
