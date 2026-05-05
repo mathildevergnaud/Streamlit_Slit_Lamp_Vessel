@@ -98,13 +98,13 @@ if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.sidebar.write('Vessel_Seg')
         
-        choice = st.sidebar.selectbox("Choose an option:", ["Option A", "Option B"])
+        tab1, tab2 = st.tabs(["Option A", "Option B"])
         
-        if choice == "Option A":
-            st.sidebar.write("You selected A")
-            
-        elif choice == "Option B":
-            st.sidebar.write("You selected B")
+        with tab1:
+            st.write("You selected A")
+        
+        with tab2:
+            st.write("You selected B")
 
 # Display selected image and segmentation
 st.write("Selected Image:")
