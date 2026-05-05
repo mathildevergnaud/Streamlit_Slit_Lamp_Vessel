@@ -59,6 +59,8 @@ if st.sidebar.button("Cornea Segmentation"):
         #print(im.shape, im.dtype)
         pred = (torch.sigmoid(model(im))>0.5).float()[0,0,:,:].cpu().detach().numpy()
         pred = (pred * 255).astype("uint8")
+
+        print(pred.shape, pred.dtype)
         
         segmented_image = Image.fromarray(pred)
         st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(segmented_image)#segmented_image
