@@ -94,7 +94,7 @@ if st.sidebar.button("Cornea Segmentation"):
         st.sidebar.error("Please select an image first.")
 
 
-if st.sidebar.button("Cornea Segmentation"):
+if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.sidebar.write('Vessel_Seg')
 
