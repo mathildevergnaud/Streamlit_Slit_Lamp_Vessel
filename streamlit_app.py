@@ -42,6 +42,9 @@ def encompasse_cornea(cornea):
     
     return blank_image
 
+def Cornea_Crop(image, mask):
+    return 0
+
 if "images" not in st.session_state:
     st.session_state.images = {}
 if "segmentations" not in st.session_state:
@@ -81,6 +84,7 @@ if st.sidebar.button("Cornea Segmentation"):
         pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
+        
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
     else:
         st.sidebar.error("Please select an image first.")
@@ -91,6 +95,12 @@ if selected_image_key:
     st.image(st.session_state.images[selected_image_key], caption="Original Image")
 
 st.write("Segmentation Result:")
+if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+    st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
+else:
+    st.write("No segmentation result yet.")
+
+st.write("Cornea:")
 if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
 else:
