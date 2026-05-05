@@ -23,8 +23,19 @@ def build_model():
         strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
         upsample_kernel_size=[(2, 2)] * 4,
         norm_name="BATCH",
-        dropout=0.2,
-    )
+        dropout=0.2)
+
+def encompasse_cornea(cornea):
+
+    contours, hierarchy = cv2.findContours(cornea, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+    blank_image = np.zeros((cornea.shape), np.uint8)
+
+    if len(contours) != 0:
+       c = max(contours, key = cv2.contourArea)
+       convexHull = cv2.convexHull(c)
+       cv2.fillConvexPoly(blank_image, convexHull, 255)
+    
+    return blank_image
 
 if "images" not in st.session_state:
     st.session_state.images = {}
@@ -44,6 +55,8 @@ if st.sidebar.button("Cornea Segmentation"):
         original_image = st.session_state.images[selected_image_key]
         
         img_array = np.array(original_image).astype(np.float32)/255.0
+
+        size= img_array.shape
         
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
         
@@ -54,9 +67,13 @@ if st.sidebar.button("Cornea Segmentation"):
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
 
         #print(im.shape, im.dtype)
-        pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()        
+        pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
+        
         st.sidebar.write(pred.shape, pred.dtype)
         pred = (pred * 255).astype("uint8")
+
+        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uitn8)
+        pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
