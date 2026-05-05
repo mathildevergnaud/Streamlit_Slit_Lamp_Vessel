@@ -44,12 +44,9 @@ if st.sidebar.button("Cornea Segmentation"):
         original_image = st.session_state.images[selected_image_key]
         
         img_array = np.array(original_image).astype(np.float32)/255.0
-
-        st.sidebar.write(img_array[100,100,:])
         
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
         
-
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
         model = load_model(device)
@@ -59,8 +56,8 @@ if st.sidebar.button("Cornea Segmentation"):
         #print(im.shape, im.dtype)
         pred = (torch.sigmoid(model(im))>0.5).float()[0,0].cpu().detach().numpy()
         pred = (pred * 255).astype("uint8")
-
-        print(pred.shape, pred.dtype)
+        
+        st.sidebar.write(pred.shape, pred.dtype)
         
         segmented_image = Image.fromarray(pred)
         st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(segmented_image)#segmented_image
