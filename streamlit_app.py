@@ -85,10 +85,11 @@ if st.sidebar.button("Cornea Segmentation"):
         
         segmented_image = Image.fromarray(pred)
         
+        Cornea_Crop(np.array(original_image), pred)
         #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
         
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
-        st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_Crop(np.array(original_image), pred)
+        st.session_state.segmentations[selected_image_key + "_cornea"] = segmented_image
     else:
         st.sidebar.error("Please select an image first.")
 
