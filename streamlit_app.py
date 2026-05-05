@@ -94,17 +94,6 @@ if st.sidebar.button("Cornea Segmentation"):
     else:
         st.sidebar.error("Please select an image first.")
 
-
-if st.sidebar.button("Vessel Segmentation"):
-    if selected_image_key:
-        st.sidebar.write('Vessel_Seg')
-        
-        if st.button("Option A"):
-            st.write("You selected A")
-        
-        if st.button("Option B"):
-            st.write("You selected B")
-
 # Display selected image and segmentation
 st.write("Selected Image:")
 if selected_image_key:
@@ -121,6 +110,24 @@ if selected_image_key and selected_image_key + "_cornea" in st.session_state.seg
     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
 else:
     st.write("No segmentation result yet.")
+
+
+if st.sidebar.button("Vessel Segmentation"):
+    if selected_image_key:
+        st.sidebar.write('Vessel_Seg')
+        
+        if st.sidebarbutton("Option A"):
+            st.write("Please add the bask on the images")
+            uploaded_files = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png"])
+            
+            if uploaded_files:
+                for file in uploaded_files:
+                    Mask = Image.open(file).
+                    st.session_state.segmentations[selected_image_key + "_Mask"] = Mask
+        
+        if st.sidebar.button("Option B"):
+            st.write("You selected B")
+
 
 
 ####################
