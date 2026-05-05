@@ -83,7 +83,7 @@ if st.sidebar.button("Cornea Segmentation"):
         pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
-        st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image))
+        st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)))
         
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
         st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_Crop(np.array(original_image), pred)
