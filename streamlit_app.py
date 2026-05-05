@@ -50,6 +50,7 @@ def Cornea_Crop(image, mask):
 
 if "images" not in st.session_state:
     st.session_state.images = {}
+    
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
     
@@ -98,12 +99,10 @@ if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.sidebar.write('Vessel_Seg')
         
-        tab1, tab2 = st.tabs(["Option A", "Option B"])
-        
-        with tab1:
+        if st.button("Option A"):
             st.write("You selected A")
         
-        with tab2:
+        if st.button("Option B"):
             st.write("You selected B")
 
 # Display selected image and segmentation
