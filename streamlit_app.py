@@ -113,7 +113,7 @@ if selected_image_key and selected_image_key + "_cornea" in st.session_state.seg
 else:
     st.write("No segmentation result yet.")
 
-if st.sidebar.button("Vessel Segmentation"):
+if st.sidebar.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
     if selected_image_key:
         st.session_state.page == "vessel":
         vessel.run()
