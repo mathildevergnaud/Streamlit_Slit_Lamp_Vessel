@@ -8,5 +8,6 @@ pytorch-lightning>=2.5.5
 lightning>=2.5.5
 scikit-image>=0.25.2
 scikit-learn>=1.7.2
-opencv-python-headless==4.10.0.84
 
+opencv-python-headless==4.10.0.84
+opencv-python==0.0.0
