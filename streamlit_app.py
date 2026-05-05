@@ -44,13 +44,13 @@ def encompasse_cornea(cornea):
 
 def Cornea_Crop(image, mask):
 
-    st.sidebar.write(image.shape)
+    st.sidebar.write(image.shape, image[700,700])
 
     if mask.dtype != np.uint8:
         mask = (mask > 0).astype("uint8") * 255
 
     result = cv2.bitwise_and(image, image, mask=mask)
-    st.sidebar.write(result.shape)
+    st.sidebar.write(result.shape,)
     return result
 
 if "images" not in st.session_state:
