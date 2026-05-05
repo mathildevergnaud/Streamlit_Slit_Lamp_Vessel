@@ -93,16 +93,21 @@ if st.sidebar.button("Cornea Segmentation"):
     else:
         st.sidebar.error("Please select an image first.")
 
+
+if st.sidebar.button("Cornea Segmentation"):
+    if selected_image_key:
+        st.sidebar.write('Vessel_Seg')
+
 # Display selected image and segmentation
 st.write("Selected Image:")
 if selected_image_key:
     st.image(st.session_state.images[selected_image_key], caption="Original Image")
 
-st.write("Segmentation Result:")
-if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
-    st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
-else:
-    st.write("No segmentation result yet.")
+# st.write("Segmentation Result:")
+# if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+#     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
+# else:
+#     st.write("No segmentation result yet.")
 
 st.write("Cornea:")
 if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
