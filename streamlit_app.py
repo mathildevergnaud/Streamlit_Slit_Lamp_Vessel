@@ -43,6 +43,10 @@ def encompasse_cornea(cornea):
     return blank_image
 
 def Cornea_Crop(image, mask):
+
+    if mask.dtype != np.uint8:
+        mask = (mask > 0).astype("uint8") * 255
+
     result = cv2.bitwise_and(img, img, mask=mask)
     return PIL.Image.fromarray(result)
 
@@ -79,7 +83,7 @@ if st.sidebar.button("Cornea Segmentation"):
         pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
-        st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype)
+        st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image))
         
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
         st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_Crop(np.array(original_image), pred)
