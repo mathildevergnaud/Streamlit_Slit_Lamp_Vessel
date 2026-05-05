@@ -116,7 +116,7 @@ if st.sidebar.button("Vessel Segmentation"):
     if selected_image_key:
         st.sidebar.write('Vessel_Seg')
         
-        if st.sidebarbutton("Option A"):
+        if st.sidebar.button("Option A"):
             st.write("Please add the bask on the images")
             uploaded_files = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png"])
             
