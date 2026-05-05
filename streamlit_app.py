@@ -122,7 +122,7 @@ if st.sidebar.button("Vessel Segmentation"):
             
             if uploaded_files:
                 for file in uploaded_files:
-                    Mask = Image.open(file).
+                    Mask = Image.open(file)
                     st.session_state.segmentations[selected_image_key + "_Mask"] = Mask
         
         if st.sidebar.button("Option B"):
