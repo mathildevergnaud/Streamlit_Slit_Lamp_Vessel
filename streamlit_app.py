@@ -15,6 +15,9 @@ import Vessel
 st.cache_data.clear()
 st.cache_resource.clear()
 
+def set_page(page):
+    st.session_state.page = page
+
 def load_model(device):
     net = build_model().to(device)
     net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
@@ -52,6 +55,7 @@ def Cornea_Crop(image, mask):
 
 if "images" not in st.session_state:
     st.session_state.images = {}
+    st.session_state.page = "home"
     
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
@@ -64,7 +68,7 @@ if uploaded_files:
 
 selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-if st.sidebar.button("Cornea Segmentation"):
+if st.sidebar.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
     if selected_image_key:
         
         original_image = st.session_state.images[selected_image_key]
@@ -114,8 +118,7 @@ else:
     st.write("No segmentation result yet.")
 
 if st.sidebar.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
-    if selected_image_key:
-        st.session_state.page == "vessel":
+    if st.session_state.page == "vessel":
         vessel.run()
     
         # st.session_state.vessel_mode = "menu"
