@@ -61,33 +61,28 @@ selected_image_key = st.radio("Select an image:", list(st.session_state.images.k
 
 if st.sidebar.button("Cornea Segmentation"):
     if selected_image_key:
-        original_image = st.session_state.images[selected_image_key]
         
+        original_image = st.session_state.images[selected_image_key]
         img_array = np.array(original_image).astype(np.float32)/255.0
-
         size= img_array.shape
         
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
         
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
         model = load_model(device)
         
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
-
-        #print(im.shape, im.dtype)
         pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
-        
-        st.sidebar.write(pred.shape, pred.dtype)
         pred = (pred * 255).astype("uint8")
 
         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
         pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
+        st.sidebar.write(pred.max(), pred.dtype)
         
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
-        st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_Crop(np.array(original_image), np.array(pred))
+        st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_Crop(np.array(original_image), pred)
     else:
         st.sidebar.error("Please select an image first.")
 
