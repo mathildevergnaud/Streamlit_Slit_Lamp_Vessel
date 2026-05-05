@@ -60,7 +60,7 @@ if st.sidebar.button("Cornea Segmentation"):
         pred = (torch.sigmoid(model(im))>0.5).float()[0,0,:,:].cpu().detach().numpy().astype(np.uint8)*255
         
         segmented_image = Image.fromarray(pred)
-        st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(resized_img)#segmented_image
+        st.session_state.segmentations[selected_image_key + "_segmented"] = Image.fromarray(segmented_image)#segmented_image
     else:
         st.sidebar.error("Please select an image first.")
 
