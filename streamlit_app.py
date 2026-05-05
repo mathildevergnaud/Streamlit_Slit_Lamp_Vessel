@@ -54,7 +54,7 @@ if st.sidebar.button("Cornea Segmentation"):
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
 
         #print(im.shape, im.dtype)
-        pred = torch.sigmoid(model(im)[0,0].cpu().detach().numpy()        
+        pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()        
         st.sidebar.write(pred.shape, pred.dtype)
         pred = (pred * 255).astype("uint8")
         
