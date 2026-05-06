@@ -43,4 +43,21 @@ def Cornea_Crop(image, mask):
     if mask.dtype != np.uint8:
         mask = (mask > 0).astype("uint8") * 255
     result = cv2.bitwise_and(image, image, mask=mask)
+
+
+def run():
+    st.title("Cornea Segmentation")
+
+    if "segmentations" not in st.session_state:
+        st.session_state.segmentations = {}
+
+    key = st.text_input("Image key")
+
+    if key:
+        seg_key = key + "_cornea"
+
+        if seg_key in st.session_state.segmentations:
+            st.image(st.session_state.segmentations[seg_key])
+        else:
+            st.info("No cornea result yet.")
     return result
