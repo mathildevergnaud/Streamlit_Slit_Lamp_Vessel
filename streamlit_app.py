@@ -11,6 +11,7 @@ from monai.networks.nets import DynUNet
 import cv2
 
 import Vessel as vessel
+import Cornea as cornea
 
 st.cache_data.clear()
 st.cache_resource.clear()
@@ -69,6 +70,9 @@ if uploaded_files:
 selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
 if st.sidebar.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
+    if st.session_state.page == "cornea":
+        cornea.run()
+    '''
     if selected_image_key:
         
         original_image = st.session_state.images[selected_image_key]
@@ -99,8 +103,10 @@ if st.sidebar.button("Cornea Segmentation", on_click=set_page, args=("cornea",))
         st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_select
     else:
         st.sidebar.error("Please select an image first.")
+'''
 
 # Display selected image and segmentation
+'''
 st.write("Selected Image:")
 if selected_image_key:
     st.image(st.session_state.images[selected_image_key], caption="Original Image")
@@ -116,161 +122,50 @@ if selected_image_key and selected_image_key + "_cornea" in st.session_state.seg
     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
 else:
     st.write("No segmentation result yet.")
+'''
 
 if st.sidebar.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
     if st.session_state.page == "vessel":
         vessel.run()
     
-        # st.session_state.vessel_mode = "menu"
-        # st.sidebar.write("Choose option:")
+    #     # st.session_state.vessel_mode = "menu"
+    #     # st.sidebar.write("Choose option:")
         
-        # if st.sidebar.button("Option A"):
-        #     st.session_state.vessel_mode = "A"
+    #     # if st.sidebar.button("Option A"):
+    #     #     st.session_state.vessel_mode = "A"
     
-        # if st.sidebar.button("Option B"):
-        #     st.session_state.vessel_mode = "B"
+    #     # if st.sidebar.button("Option B"):
+    #     #     st.session_state.vessel_mode = "B"
 
-        # if st.session_state.vessel_mode == "A":
-        #     st.sidebar.write("Please upload images")
+    #     # if st.session_state.vessel_mode == "A":
+    #     #     st.sidebar.write("Please upload images")
+    #     def run():
+    # st.title("Cornea Segmentation")
+
+    # if "segmentations" not in st.session_state:
+    #     st.session_state.segmentations = {}
+
+    # key = st.text_input("Image key")
+
+    # if key:
+    #     seg_key = key + "_cornea"
+
+    #     if seg_key in st.session_state.segmentations:
+    #         st.image(st.session_state.segmentations[seg_key])
+    #     else:
+    #         st.info("No cornea result yet.")
+    #     #     uploaded_file = st.sidebar.file_uploader(
+    #     #         "Upload image",
+    #     #         type=["jpg", "jpeg", "png"],
+    #     #         key="Mask_upload"
+    #     #     )
         
-        #     uploaded_file = st.sidebar.file_uploader(
-        #         "Upload image",
-        #         type=["jpg", "jpeg", "png"],
-        #         key="Mask_upload"
-        #     )
-        
-        #     if uploaded_file is not None:
-        #         mask = Image.open(uploaded_file)
-        #         st.session_state.segmentations[selected_image_key + "_Mask"] = mask
-        #         st.success("Mask saved")
+    #     #     if uploaded_file is not None:
+    #     #         mask = Image.open(uploaded_file)
+    #     #         st.session_state.segmentations[selected_image_key + "_Mask"] = mask
+    #     #         st.success("Mask saved")
 
 
-####################
 
-# import streamlit as st
-# from PIL import Image
-
-# from monai.networks.nets import DynUNet
-
-# #from utils.cornea.train_monai_pl_v2 import EyeBVSegm
-
-# import torch
-# import torchvision.transforms as transforms
-
-# import skimage
-# import numpy as np
-
-# @st.cache_resource
-# def build_model():
-#     return DynUNet(
-#         spatial_dims=2,
-#         in_channels=3,
-#         out_channels=1,
-#         kernel_size=[(3, 3)] * 5,
-#         strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
-#         upsample_kernel_size=[(2, 2)] * 4,
-#         norm_name="BATCH",
-#         dropout=0.2,
-#     )
-
-# @st.cache_resource
-# def load_model(device):
-#     net = build_model().to(device)
-#     net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
-#     net.eval()
-#     return net
-    
-# #st.set_page_config(layout="wide")
-
-# # -------- Sidebar --------
-# st.sidebar.title("Upload Images")
-
-# uploaded_files = st.sidebar.file_uploader(
-#     "Choose images",
-#     type=["png", "jpg", "jpeg"],
-#     accept_multiple_files=True
-# ) 
-
-# # Session state
-# if "images" not in st.session_state:
-#     st.session_state.images = {}
-
-# # Store uploaded images
-# if uploaded_files:
-#     for file in uploaded_files:
-#         if file.name not in st.session_state.images:
-#             st.session_state.images[file.name] = Image.open(file)
-
-# # Image selector
-# st.sidebar.title("Image List")
-# image_names = list(st.session_state.images.keys())
-
-# selected_image = None
-# if image_names:
-#     selected_image = st.sidebar.radio("Select an image", image_names)
-
-#     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#     model = load_model(device)
-
-# if st.sidebar.button("Cornea_Segmentation"):
-#     C
-
-# if selected_image is not None:
-#     image = st.session_state.images[selected_image]
-#     # ensure numpy float32
-#     image = np.array(image).astype(np.float32)
-#     # resize
-#     im = skimage.transform.resize(
-#         image,
-#         (512, 512),
-#         anti_aliasing=True
-#     ).astype(np.float32)
-
-# if selected_image is not None:
-#     image = st.session_state.images[selected_image]
-#     # ensure numpy float32
-#     image = np.array(image).astype(np.float32)
-#     # resize
-#     im = skimage.transform.resize(
-#         image,
-#         (512, 512),
-#         anti_aliasing=True
-#     ).astype(np.float32)
-    
-#     # convert to tensor properly
-#     im = torch.from_numpy(im).permute(2, 0, 1).unsqueeze(0).to(device)
-
-#     pred = model(im)
-    
-#     st.sidebar.write(im.shape)
-    
-    # try:
-    #     prediction = model(im)
-    # except Exception as e:
-    #     st.error(str(e))
-    #     raise
-    
-# -------- Main Layout --------
-#st.title("Image Viewer")
-
-#     pred = model(im)
-
-#     #predict_im = pred[0,0,:,:].cpu().detach().numpy()
-
-#     #to_show = Image.fromarray(blank_image.astype(np.uint8)*255.0
-    
-#     st.sidebar.write(im.shape)
-    
-#     # try:
-#     #     prediction = model(im)
-#     # except Exception as e:
-#     #     st.error(str(e))
-#     #     raise
-    
-# # -------- Main Layout --------
-# st.title("Image Viewer")
-
-# if selected_image:
-#     image = st.session_state.images[selected_image]
 #     st.image(image, caption=selected_image, use_container_width=True)
     
