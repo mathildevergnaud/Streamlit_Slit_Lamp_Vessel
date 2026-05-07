@@ -34,6 +34,16 @@ if uploaded_files:
 
 selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
+st.markdown("""
+<style>
+div.stButton > button {
+    height: 3em;
+    border-radius: 10px;
+    font-weight: bold;
+}
+</style>
+""", unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns([1, 1, 6])
 
 with col1:
