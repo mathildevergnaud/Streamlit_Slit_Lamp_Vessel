@@ -57,6 +57,7 @@ def run():
     if selected_image_key:
         
         original_image = st.session_state.images[selected_image_key]
+        st.write(type(original_image))
         image = np.array(original_image).astype(np.uint8)
         
         img_array = np.array(original_image).astype(np.float32)/255.0
