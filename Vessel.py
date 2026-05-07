@@ -159,9 +159,6 @@ def recfin_im_2(list_im):
 def run():
 	st.title("Vessel Segmentation")
 	
-	if "segmentations" not in st.session_state:
-		st.session_state.segmentations = {}
-	
 	selected_image_key = st.session_state.get("image_select")
 	st.write(selected_image_key)
 	
