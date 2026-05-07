@@ -43,10 +43,10 @@ def Cornea_Crop(image, mask):
     st.write("Shape:", image.shape)
     st.write("Dtype:", image.dtype)
     
-    st.write(image[int(size[0]/2), int(size[1]/2)])
+    st.write(image[820,1200])
     if mask.dtype != np.uint8:
         mask = (mask > 0).astype("uint8") * 255
-    result = cv2.bitwise_and(image, image, mask=mask)
+    return result = cv2.bitwise_and(image, image, mask=mask)
 
 
 def run():
