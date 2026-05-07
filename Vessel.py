@@ -22,7 +22,6 @@ def run():
 
     if selected_option == 'Mask':
         uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
-        st.write(uploaded_Mask['name'])
         if uploaded_Mask:
             for file in uploaded_Mask:
                 img = Image.open(file)
