@@ -126,17 +126,15 @@ def run():
             st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
 
     else :
+		key = selected_image_key + "_cornea"
+
+		if key in st.session_state.segmentations:
+			st.write('Cornea Segmentation Done')
+			st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
+			st.session_state.segmentations[selected_image_key + "_mask"] = st.image(st.session_state.segmentations[selected_image_key + "_cornea"]
 		
-		if selected_image_key:
-			key = selected_image_key + "_cornea"
-			
-			if key in st.session_state.segmentations:
-				st.write('Cornea Segmentation Done')
-				st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-				st.session_state.segmentations[selected_image_key + "_mask"] = st.image(st.session_state.segmentations[selected_image_key + "_cornea"]
-	
-			else : 
-				st.write('Please run cornea segmentation before')
+		else : 
+			st.write('Please run cornea segmentation before')
 
 
 	input = st.st.session_state.images[selected_image_key]
