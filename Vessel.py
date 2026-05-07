@@ -60,7 +60,7 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
     global x_im 
     global y_im
     global bordure
-
+	
 	size_im = (576,576)
     bordure = 100
         
