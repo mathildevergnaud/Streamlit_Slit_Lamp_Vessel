@@ -85,22 +85,18 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 
     while i + size_im[0] < x_im :
         while j + size_im[1] < y_im:
-            new_imagette_list.append(transform(im[i :i+size_im[0], j: j+size_im[1]]).to(device)
-)
+            new_imagette_list.append(transform(im[i :i+size_im[0], j: j+size_im[1]]).to(device))
             j+= size_im[1]-bordure
 
-        new_imagette_list.append(transform(im[i :i+size_im[0], y_im-size_im[1]:y_im]).to(device)
-)
+        new_imagette_list.append(transform(im[i :i+size_im[0], y_im-size_im[1]:y_im]).to(device))
         i += size_im[0]-bordure
         j = 0
 
     while j + size_im[1] < y_im:
-        new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, j: j+size_im[1]]).to(device)
-)
+        new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, j: j+size_im[1]]).to(device))
         j+= size_im[1]-bordure
 
-    new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, y_im-size_im[1]:y_im]).to(device)
-)
+    new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, y_im-size_im[1]:y_im]).to(device))
 
     return new_imagette_list
 
