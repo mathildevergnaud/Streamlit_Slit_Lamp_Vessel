@@ -26,13 +26,6 @@ if "images" not in st.session_state:
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
     
-uploaded_files = st.sidebar.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
-if uploaded_files:
-    for file in uploaded_files:
-        img = Image.open(file)
-        st.session_state.images[file.name] = img
-
-selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
 page_index = {
     "Main": 0,
@@ -51,7 +44,15 @@ selected = option_menu(
 st.session_state.page = selected
 
 if selected == "Main":
-    st.write('main')
+    st.write('Images')
+    uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
+    if uploaded_files:
+    for file in uploaded_files:
+        img = Image.open(file)
+        st.session_state.images[file.name] = img
+
+    selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
+
 
 if st.session_state.page == "Cornea":
             cornea.run()
