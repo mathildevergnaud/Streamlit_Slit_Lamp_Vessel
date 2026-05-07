@@ -8,6 +8,15 @@ def run():
 
     selected_image_key = st.session_state.get("image_select")
     st.write(selected_image_key)
+    
+    st.write('Do you want to use the cornea segmentation or do you have already a mask ')
+
+    selected_option = st.radio(
+    "Select an option:",
+    ["Yes", "No"],
+    horizontal=True )
+
+    st.write(f"Selected: {selected_option}")
         
     if selected_image_key:
         
@@ -16,7 +25,6 @@ def run():
             
             if key in st.session_state.segmentations:
                 st.write('Cornea Segmentation Done')
-
 
             else : 
                 st.write('Missing Cornea Selection')
