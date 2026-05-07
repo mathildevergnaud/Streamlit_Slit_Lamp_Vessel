@@ -60,11 +60,11 @@ def trans_func(x, a, b):
 def flt32_to_unint8(img):
     return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) 
 
-def shiny_stitching(image, imagette, i, j , size_im, mask):
+def shiny_stitching(image, imagette, i, j, size_im, mask):
 	image_ = np.zeros((x_im,y_im))
 	image_mask = np.zeros((x_im,y_im))
-	image_[i:i +size_im[0], j: j + size_im[1]] = imagette
-	image_mask[i:i +size_im[0], j:j +size_im[1]] = mask
+	image_[i:i + size_im[0], j: j + size_im[1]] = imagette
+	image_mask[i:i + size_im[0], j:j +size_im[1]] = mask
 	
 	image=image*(1-image_mask)+image_*image_mask
 	
@@ -113,8 +113,9 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 	
 	return new_imagette_list
 
-def recfin_im_2(list_im, size_im):
+def recfin_im_2(list_im):
 	
+	size_im = [576,576]
 	mask = np.zeros((size_im[0], size_im[1]))
 	for i in range(size_im[0]):
 		for j in range(size_im[1]):
@@ -208,7 +209,7 @@ def run():
 		pred = torch.sigmoid(out)[0,0].cpu().detach().numpy()
 		outputs.append(pred)
 	
-	output_image = (powder_trail_filter(recfin_im_2(outputs, mask_array.shape))*255).astype(np.uint8)
+	output_image = (powder_trail_filter(recfin_im_2(outputs))*255).astype(np.uint8)
 	Vessel_seg = Image.fromarray(output_image)
 	st.image(Vessel_seg, caption = 'Vessel')
 
