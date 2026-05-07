@@ -50,7 +50,7 @@ def func_f(x):
     else:
         #print(np.exp(-1/x))
         return np.exp(-1/x)
-
+		
 def func_g(x):
 	return func_f(x)/(func_f(x)+func_f(1-x))
 
@@ -58,8 +58,17 @@ def trans_func(x, a, b):
 	return func_g((x-a)/(b-a))
 
 def flt32_to_unint8(img):
-   #print(img.min(),img.max())
-    return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) #img.astype(numpy.uint8)#
+    return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) 
+
+def shiny_stitching(image, imagette, i, j , size_im, mask):
+	image_ = np.zeros((x_im,y_im))
+	image_mask = np.zeros((x_im,y_im))
+	image_[i:i +size_im[0], j: j + size_im[1]] = imagette
+	image_mask[i:i +size_im[0], j:j +size_im[1]] = mask
+	
+	image=image*(1-image_mask)+image_*image_mask
+	
+	return image
 
 def cut_im_2(image_in, mask_in, device = 'cpu'):
 	global x_im 
