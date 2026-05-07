@@ -52,6 +52,7 @@ def run():
         st.session_state.segmentations = {}
 
     selected_image_key = st.session_state.get("image_select")
+    st.write(selected_image_key)
         
     if selected_image_key:
         
