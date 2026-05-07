@@ -104,6 +104,47 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 	
 	return new_imagette_list
 
+def recfin_im_2(list_im, size_im):
+	
+	mask = np.zeros((size_im[0], size_im[1]))
+	for i in range(size_im[0]):
+		for j in range(size_im[1]):
+			mask[i,j] = trans_func(i, 0, bordure)*trans_func(j, 0,bordure)
+	image =  np.zeros((x_im,y_im))
+	i, j = 0,0
+	im_num = 0
+	
+	while i + size_im[0] < x_im :
+		while j + size_im[1] < y_im:
+			
+			imagette = list_im[im_num].astype(np.float32)
+			
+			image = shiny_stitching(image, imagette, i,j , size_im, mask)
+			im_num += 1
+			j+= size_im[1]-bordure
+			
+		imagette = list_im[im_num].astype(np.float32)
+		image = shiny_stitching(image, imagette, i, y_im-size_im[1], size_im, mask)
+		im_num += 1
+		i += size_im[0]-bordure
+		j = 0
+		
+	while j + size_im[1] < y_im:
+		imagette = list_im[im_num].astype(np.float32)
+		image = shiny_stitching(image, imagette, x_im-size_im[0],j , size_im, mask)
+		im_num += 1
+		
+		j+= size_im[1]-bordure
+		
+	imagette = list_im[im_num].astype(np.float32)
+	image = shiny_stitching(image, imagette, x_im-size_im[0],y_im-size_im[1] , size_im, mask)
+	im_num += 1
+	
+	j+= size_im[1]-bordure
+	
+	image[image>1]=1
+	image[image<0]=0
+	return image
 
 def run():
 	st.title("Vessel Segmentation")
@@ -157,5 +198,12 @@ def run():
 		out = model(inp.to(device).unsqueeze(0))
 		pred = torch.sigmoid(out)[0,0].cpu().detach().numpy()
 		outputs.append(pred)
+		
+    output_image = (powder_trail_filter(recfin_im_2(outputs, mask.array.shape))*255).astype(np.uint8)
+	Vessel_seg = Image.fromarray(output_image)
+
+	st.image(Vessel_seg, caption = 'Vessel')
+
+
 
 
