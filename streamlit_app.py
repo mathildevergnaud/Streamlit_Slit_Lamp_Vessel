@@ -17,9 +17,6 @@ import Cornea as cornea
 st.cache_data.clear()
 st.cache_resource.clear()
 
-def set_page(page):
-    st.session_state.page = page
-
 if "images" not in st.session_state:
     st.session_state.images = {}
     st.session_state.page = "home"
@@ -37,10 +34,12 @@ selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.
 
 selected = option_menu(
     menu_title=None,
-    options=["Main", "Cornea"],
-    icons=["house", "eye"],
+    options=["Main", "Cornea", "Vessel"],
+    icons=["house", "eye", "vessel"],
     orientation="horizontal",
 )
+
+st.session_state.page = selected
 
 if selected == "Main":
     st.write('main')
