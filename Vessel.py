@@ -79,6 +79,7 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 	g = ((mask_in*g)/255.0).astype(np.float32)
 	
 	im = np.concatenate((im, g[:,:,None]), axis=2)
+	im = im.astype(np.float32)/255.0
 	
 	transform = transforms.Compose([transforms.ToTensor()])
 	new_imagette_list=[]
@@ -138,11 +139,13 @@ def run():
 	
 	input = st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
-
-	st.image(input, caption = 'Image')
 	
-	input_array = np.array(input).astype(np.float32)/255.0
+	input_array = np.array(input).astype(np.uint8)
 	mask_array = np.array(mask_in).astype(np.uint8)
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	model = load_model(device)
+
+	imagette = cut_im_2(input_array, mask_array, device)
+
+
