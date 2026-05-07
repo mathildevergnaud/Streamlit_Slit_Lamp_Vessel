@@ -1,5 +1,7 @@
 import streamlit as st
 
+from PIL import Image
+
 def run():
     st.title("Vessel Segmentation")
 
@@ -19,7 +21,7 @@ def run():
     st.write(f"Selected: {selected_option}")
 
     if selected_option == 'Mask':
-        uploaded_Mask = st.sidebar.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
+        uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
         if uploaded_Mask:
             img = Image.open(file)
             st.session_state.segmentations[selected_image_key + "_mask"] = img
