@@ -59,7 +59,8 @@ def run():
         original_image = st.session_state.images[selected_image_key]
         st.image(original_image, caption="Segmented Image")
         
-        image = np.array(original_image).astype(np.uint8)
+        np_image = np.array(original_image).astype(np.uint8)
+        st.write('image : ',type(np_image))
         
         img_array = np.array(original_image).astype(np.float32)/255.0
         size= img_array.shape
@@ -78,11 +79,11 @@ def run():
         pred = encompasse_cornea(pred)
 
         st.write('pred : ', type(pred))
-        st.write('image : ',type(image))
+        st.write('image : ',type(np_image))
         
         segmented_image = Image.fromarray(pred)
         
-        Cornea_select = Image.fromarray(Cornea_Crop(image, pred))
+        Cornea_select = Image.fromarray(Cornea_Crop(np_image, pred))
         #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
         
         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
