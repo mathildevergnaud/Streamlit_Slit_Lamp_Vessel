@@ -19,41 +19,6 @@ st.cache_resource.clear()
 def set_page(page):
     st.session_state.page = page
 
-def load_model(device):
-    net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
-    net.eval()
-    return net
-
-def build_model():
-    return DynUNet(
-        spatial_dims=2,
-        in_channels=3,
-        out_channels=1,
-        kernel_size=[(3, 3)] * 5,
-        strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
-        upsample_kernel_size=[(2, 2)] * 4,
-        norm_name="BATCH",
-        dropout=0.2)
-
-def encompasse_cornea(cornea):
-
-    contours, hierarchy = cv2.findContours(cornea, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-    blank_image = np.zeros((cornea.shape), np.uint8)
-
-    if len(contours) != 0:
-       c = max(contours, key = cv2.contourArea)
-       convexHull = cv2.convexHull(c)
-       cv2.fillConvexPoly(blank_image, convexHull, 255)
-    
-    return blank_image
-
-def Cornea_Crop(image, mask):
-    if mask.dtype != np.uint8:
-        mask = (mask > 0).astype("uint8") * 255
-    result = cv2.bitwise_and(image, image, mask=mask)
-    return result
-
 if "images" not in st.session_state:
     st.session_state.images = {}
     st.session_state.page = "home"
