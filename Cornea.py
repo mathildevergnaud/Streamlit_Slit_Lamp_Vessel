@@ -72,13 +72,14 @@ def run():
         
         pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
         pred = (pred * 255).astype("uint8")
+        
+        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
 
         st.write("Shape:", pred.shape)
         st.write("Dtype:", pred.dtype)
         
-        st.write(pred[250, 250])
-
-        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
+        st.write(pred[size[0]/2, size[1]/2)
+        
         pred = encompasse_cornea(pred)
         
 
