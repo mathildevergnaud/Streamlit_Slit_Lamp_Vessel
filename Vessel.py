@@ -126,7 +126,7 @@ def run():
             st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
 
     else :
-            
+		
 		if selected_image_key:
 			key = selected_image_key + "_cornea"
 			
