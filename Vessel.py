@@ -51,6 +51,11 @@ def func_g(x):
 def trans_func(x, a, b):
 	return func_g((x-a)/(b-a))
 
+def flt32_to_unint8(img):
+   #print(img.min(),img.max())
+    return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) #img.astype(numpy.uint8)#
+
+
 def run():
     st.title("Vessel Segmentation")
 
