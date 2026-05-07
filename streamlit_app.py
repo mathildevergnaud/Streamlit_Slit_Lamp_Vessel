@@ -34,13 +34,22 @@ if uploaded_files:
 
 selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
-    if st.session_state.page == "cornea":
-        cornea.run()
+col1, col2, col3 = st.columns([1, 1, 6])
 
-if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
-    if st.session_state.page == "vessel":
-        vessel.run()
+with col1:
+    if st.button("🏠 Main", use_container_width=True):
+        st.write('main')
+        #st.switch_page("main.py")
+
+with col2:
+    if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
+        if st.session_state.page == "cornea":
+            cornea.run()
+
+with col3:
+    if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
+        if st.session_state.page == "vessel":
+            vessel.run()
     
     #     # st.session_state.vessel_mode = "menu"
     #     # st.sidebar.write("Choose option:")
