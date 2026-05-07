@@ -99,42 +99,39 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 
 
 def run():
-    st.title("Vessel Segmentation")
-
-    if "segmentations" not in st.session_state:
-        st.session_state.segmentations = {}
-
-    selected_image_key = st.session_state.get("image_select")
-    st.write(selected_image_key)
-    
-    st.write('Do you want to use the cornea segmentation or do you have already a mask ')
-
-    selected_option = st.radio(
-    "Select an option:",
-    ["Segmentation", "Mask"],
-    horizontal=True )
-
-    st.write(f"Selected: {selected_option}")
-
-    if selected_option == 'Mask':
-        uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
-        if uploaded_Mask:
-            st.write(f"Filename: {uploaded_Mask.name}")
-            img = Image.open(uploaded_Mask)
-            st.session_state.segmentations[selected_image_key + "_mask"] = img
-            
-            st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
-			
-	else :
+	st.title("Vessel Segmentation")
+	
+	if "segmentations" not in st.session_state:
+		st.session_state.segmentations = {}
+	
+	selected_image_key = st.session_state.get("image_select")
+	st.write(selected_image_key)
+	
+	st.write('Do you want to use the cornea segmentation or do you have already a mask ')
+	
+	selected_option = st.radio(
+	"Select an option:",
+	["Segmentation", "Mask"],
+	horizontal=True )
+	
+	st.write(f"Selected: {selected_option}")
+	if selected_option == 'Mask':
+		uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
+		if uploaded_Mask:
+			st.write(f"Filename: {uploaded_Mask.name}")
+			img = Image.open(uploaded_Mask)
+			st.session_state.segmentations[selected_image_key + "_mask"] = img
+			st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")	
+	elif selected_option == 'Segmentation'  :
 		key = selected_image_key + "_cornea"
 		if key in st.session_state.segmentations:
 			st.write('Cornea Segmentation Done')
 			st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-			st.session_state.segmentations[selected_image_key + "_mask"] = st.image(st.session_state.segmentations[selected_image_key + "_cornea"]
-		else : 
+			st.session_state.segmentations[selected_image_key + "_mask"] = st.session_state.segmentations[selected_image_key + "_cornea"] 
+		else:
 			st.write('Please run cornea segmentation before')
 	
-	input = st.st.session_state.images[selected_image_key]
+	input = st.st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
 	
 	input_array = np.array(input).astype(np.float32)/255.0
@@ -142,5 +139,3 @@ def run():
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	model = load_model(device)
-
-	
