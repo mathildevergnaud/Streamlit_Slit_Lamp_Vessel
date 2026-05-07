@@ -73,13 +73,13 @@ def run():
         pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
         pred = (pred * 255).astype("uint8")
         
-        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
-
+        pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)                
+        pred = encompasse_cornea(pred)
+        
+        st.write(pred[int(size[0]/2), int(size[1]/2)])
+        
         st.write("Shape:", pred.shape)
         st.write("Dtype:", pred.dtype)
-                
-        pred = encompasse_cornea(pred)
-        st.write(pred[int(size[0]/2), int(size[1]/2)])
         
         segmented_image = Image.fromarray(pred)
         
