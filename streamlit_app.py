@@ -19,7 +19,6 @@ st.cache_resource.clear()
 
 if "images" not in st.session_state:
     st.session_state.images = {}
-    st.session_state.page = "home"
     
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
@@ -37,6 +36,7 @@ selected = option_menu(
     options=["Main", "Cornea", "Vessel"],
     icons=["house", "eye", "vessel"],
     orientation="horizontal",
+    default_index=page_index[st.session_state.page]
 )
 
 st.session_state.page = selected
