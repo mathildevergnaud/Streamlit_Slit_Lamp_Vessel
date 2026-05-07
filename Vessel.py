@@ -26,14 +26,22 @@ def run():
             st.write(f"Filename: {uploaded_Mask.name}")
             img = Image.open(uploaded_Mask)
             st.session_state.segmentations[selected_image_key + "_mask"] = img
-        
-    if selected_image_key:
+            
+            st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
+
+
+    else :
         
         if selected_image_key:
-            key = selected_image_key + "_cornea"
             
-            if key in st.session_state.segmentations:
-                st.write('Cornea Segmentation Done')
+            if selected_image_key:
+                key = selected_image_key + "_cornea"
+                
+                if key in st.session_state.segmentations:
+                    st.write('Cornea Segmentation Done')
+                    st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
 
-            else : 
-                st.write('Missing Cornea Selection')
+                
+    
+                else : 
+                    st.write('Please run cornea segmentation before')
