@@ -78,7 +78,7 @@ def cut_im_2(image_in, mask_in, device = 'cpu'):
 	g = gaussian_2D(center, radius, mask_in.shape)
 	g = ((mask_in*g)/255.0).astype(np.float32)
 	
-	im = np.concatenate((im, g[:,:,None]), axis=2)
+	im = np.concatenate((image_in, g[:,:,None]), axis=2)
 	im = im.astype(np.float32)/255.0
 	
 	transform = transforms.Compose([transforms.ToTensor()])
