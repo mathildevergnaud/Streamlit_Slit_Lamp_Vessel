@@ -50,8 +50,8 @@ def run():
 
     if "segmentations" not in st.session_state:
         st.session_state.segmentations = {}
-
-         if selected_image_key:
+        
+        if selected_image_key:
             
             original_image = st.session_state.images[selected_image_key]
             image = np.array(original_image).astype(np.uint8)
