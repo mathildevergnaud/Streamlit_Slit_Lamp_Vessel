@@ -133,6 +133,8 @@ def run():
 	
 	input = st.st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
+
+	st.image(input)
 	
 	input_array = np.array(input).astype(np.float32)/255.0
 	mask_array = np.array(mask_in).astype(np.uint8)
