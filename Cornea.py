@@ -81,4 +81,3 @@ def run():
             st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_select
         else:
             st.sidebar.error("Please select an image first.")
-    return result
