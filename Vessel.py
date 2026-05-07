@@ -135,15 +135,14 @@ def run():
 		
 		else : 
 			st.write('Please run cornea segmentation before')
-
-
+	
 	input = st.st.session_state.images[selected_image_key]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
-
+	
 	input_array = np.array(input).astype(np.float32)/255.0
 	mask_array = np.array(mask_in).astype(np.uint8)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = load_model(device)
+	
+	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+	model = load_model(device)
 
 	
