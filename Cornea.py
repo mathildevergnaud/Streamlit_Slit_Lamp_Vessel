@@ -40,6 +40,10 @@ def encompasse_cornea(cornea):
     return blank_image
 
 def Cornea_Crop(image, mask):
+    st.write("Shape:", image.shape)
+    st.write("Dtype:", image.dtype)
+    
+    st.write(image[int(size[0]/2), int(size[1]/2)])
     if mask.dtype != np.uint8:
         mask = (mask > 0).astype("uint8") * 255
     result = cv2.bitwise_and(image, image, mask=mask)
@@ -75,11 +79,6 @@ def run():
         
         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)                
         pred = encompasse_cornea(pred)
-        
-        st.write(pred[int(size[0]/2), int(size[1]/2)])
-        
-        st.write("Shape:", pred.shape)
-        st.write("Dtype:", pred.dtype)
         
         segmented_image = Image.fromarray(pred)
         
