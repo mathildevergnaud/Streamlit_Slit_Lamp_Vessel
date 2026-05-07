@@ -148,4 +148,11 @@ def run():
 
 	imagette = cut_im_2(input_array, mask_array, device)
 
+	outputs = []
+
+	for inp in imagette : 
+		out = model(inp.to(device).unsqueeze(0))
+		pred = torch.sigmoid(out)[0,0].cpu().detach().numpy()
+		outputs.append(pred)
+
 
