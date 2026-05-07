@@ -199,7 +199,7 @@ def run():
 		pred = torch.sigmoid(out)[0,0].cpu().detach().numpy()
 		outputs.append(pred)
 	
-	output_image = (powder_trail_filter(recfin_im_2(outputs, mask.array.shape))*255).astype(np.uint8)
+	output_image = (powder_trail_filter(recfin_im_2(outputs, mask_array.shape))*255).astype(np.uint8)
 	Vessel_seg = Image.fromarray(output_image)
 	st.image(Vessel_seg, caption = 'Vessel')
 
