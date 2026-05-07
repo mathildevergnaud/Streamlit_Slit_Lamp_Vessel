@@ -47,9 +47,9 @@ if selected == "Main":
     st.write('Images')
     uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
     if uploaded_files:
-    for file in uploaded_files:
-        img = Image.open(file)
-        st.session_state.images[file.name] = img
+        for file in uploaded_files:
+            img = Image.open(file)
+            st.session_state.images[file.name] = img
 
     selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
