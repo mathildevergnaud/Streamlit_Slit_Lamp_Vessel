@@ -38,6 +38,18 @@ def powder_trail_filter(img, tresh_high=0.9, tresh_low=0.1):#0.87 #0.25
             img_[markers==i]=1
     return img_
 
+def func_f(x):
+    if x<=0:
+        return 0
+    else:
+        #print(np.exp(-1/x))
+        return np.exp(-1/x)
+
+def func_g(x):
+	return func_f(x)/(func_f(x)+func_f(1-x))
+
+def trans_func(x, a, b):
+	return func_g((x-a)/(b-a))
 
 def run():
     st.title("Vessel Segmentation")
