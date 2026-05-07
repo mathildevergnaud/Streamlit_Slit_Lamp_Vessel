@@ -26,70 +26,19 @@ if "images" not in st.session_state:
 if "segmentations" not in st.session_state:
     st.session_state.segmentations = {}
     
-uploaded_files = st.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
+uploaded_files = st.sidebar.file_uploader("Upload images", accept_multiple_files=True, type=["jpg", "jpeg", "png"])
 if uploaded_files:
     for file in uploaded_files:
         img = Image.open(file)
         st.session_state.images[file.name] = img
 
-selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
+selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-if st.sidebar.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
+if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
     if st.session_state.page == "cornea":
         cornea.run()
-#     '''
-#     if selected_image_key:
-        
-#         original_image = st.session_state.images[selected_image_key]
-#         image = np.array(original_image).astype(np.uint8)
-        
-#         img_array = np.array(original_image).astype(np.float32)/255.0
-#         size= img_array.shape
-        
-#         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
-        
-#         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#         model = load_model(device)
-        
-#         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
-        
-#         pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
-#         pred = (pred * 255).astype("uint8")
 
-#         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
-#         pred = encompasse_cornea(pred)
-        
-#         segmented_image = Image.fromarray(pred)
-        
-#         Cornea_select = Image.fromarray(Cornea_Crop(image, pred))
-#         #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
-        
-#         st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
-#         st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_select
-#     else:
-#         st.sidebar.error("Please select an image first.")
-# '''
-
-# # Display selected image and segmentation
-# '''
-# st.write("Selected Image:")
-# if selected_image_key:
-#     st.image(st.session_state.images[selected_image_key], caption="Original Image")
-
-# # st.write("Segmentation Result:")
-# # if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
-# #     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
-# # else:
-# #     st.write("No segmentation result yet.")
-
-# st.write("Cornea:")
-# if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-#     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-# else:
-#     st.write("No segmentation result yet.")
-# '''
-
-if st.sidebar.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
+if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
     if st.session_state.page == "vessel":
         vessel.run()
     
