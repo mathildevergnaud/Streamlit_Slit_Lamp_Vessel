@@ -19,6 +19,10 @@ def build_model():
         norm_name="BATCH",
         dropout=0.2)
 
+def gaussian_2D(center, sig, size_im):
+    x, y = np.meshgrid(np.linspace(0, size_im[1], size_im[1]), np.linspace(0, size_im[0], size_im[0]))
+    gauss = np.exp((-1*(x-center[0])**2)/((sig**2)/2) + (-1*(y-center[1])**2)/((sig**2)/2))
+    return 1-gauss
 
 
 def run():
