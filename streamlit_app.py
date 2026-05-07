@@ -44,12 +44,10 @@ st.session_state.page = selected
 if selected == "Main":
     st.write('main')
 
-elif selected == "Cornea":
-    if st.session_state.page == "cornea":
+if st.session_state.page == "Cornea":
             cornea.run()
 
-elif selected == "Vessel":
-    if st.session_state.page == "vessel":
+if st.session_state.page == "Vessel":
             vessel.run()
 
 
