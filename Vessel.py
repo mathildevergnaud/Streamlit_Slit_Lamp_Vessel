@@ -56,49 +56,46 @@ def flt32_to_unint8(img):
     return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) #img.astype(numpy.uint8)#
 
 def cut_im_2(image_in, mask_in, device = 'cpu'):
-
-    global x_im 
-    global y_im
-    global bordure
+	global x_im 
+	global y_im
+	global bordure
 	
-	size_im = (576,576)
-    bordure = 100
-        
+	size_im = [576,576]
+	bordure = 100
+		
 	cnt, _ = cv2.findContours((mask_in).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	contour = max(cnt, key = cv2.contourArea)
-
+	
 	(x,y), radius = cv2.minEnclosingCircle(contour)
 	center = (int(x), int(y))
 	radius = int(radius)
-
+	
 	g = gaussian_2D(center, radius, mask_in.shape)
-
 	g = ((mask_in*g)/255.0).astype(np.float32)
-
+	
 	im = np.concatenate((im, g[:,:,None]), axis=2)
-
-    transform = transforms.Compose([transforms.ToTensor()])
-    new_imagette_list=[]
-
-    x_im,y_im,*_  = im.shape 
-    i, j = 0,0
-
-    while i + size_im[0] < x_im :
-        while j + size_im[1] < y_im:
-            new_imagette_list.append(transform(im[i :i+size_im[0], j: j+size_im[1]]).to(device))
-            j+= size_im[1]-bordure
-
-        new_imagette_list.append(transform(im[i :i+size_im[0], y_im-size_im[1]:y_im]).to(device))
-        i += size_im[0]-bordure
-        j = 0
-
-    while j + size_im[1] < y_im:
-        new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, j: j+size_im[1]]).to(device))
-        j+= size_im[1]-bordure
-
-    new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, y_im-size_im[1]:y_im]).to(device))
-
-    return new_imagette_list
+	
+	transform = transforms.Compose([transforms.ToTensor()])
+	new_imagette_list=[]
+	
+	x_im,y_im,*_  = im.shape 
+	i, j = 0,0
+	
+	while i + size_im[0] < x_im :
+		while j + size_im[1] < y_im:
+			new_imagette_list.append(transform(im[i :i+size_im[0], j: j+size_im[1]]).to(device))
+			j+= size_im[1]-bordure
+		
+		new_imagette_list.append(transform(im[i :i+size_im[0], y_im-size_im[1]:y_im]).to(device))
+		i += size_im[0]-bordure
+		j = 0
+	
+	while j + size_im[1] < y_im:
+		new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, j: j+size_im[1]]).to(device))
+		j+= size_im[1]-bordure
+	new_imagette_list.append(transform(im[x_im -size_im[0] :x_im, y_im-size_im[1]:y_im]).to(device))
+	
+	return new_imagette_list
 
 
 def run():
