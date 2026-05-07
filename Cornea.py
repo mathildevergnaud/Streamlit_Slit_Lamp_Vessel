@@ -77,12 +77,9 @@ def run():
 
         st.write("Shape:", pred.shape)
         st.write("Dtype:", pred.dtype)
-        
-        st.write(pred[int(size[0]/2), int(size[1]/2)])
-        
+                
         pred = encompasse_cornea(pred)
-        
-
+        st.write(pred[int(size[0]/2), int(size[1]/2)])
         
         segmented_image = Image.fromarray(pred)
         
