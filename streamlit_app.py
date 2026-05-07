@@ -34,6 +34,12 @@ if uploaded_files:
 
 selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
+page_index = {
+    "Main": 0,
+    "Cornea": 1,
+    "Vessel": 2
+}
+
 selected = option_menu(
     menu_title=None,
     options=["Main", "Cornea", "Vessel"],
