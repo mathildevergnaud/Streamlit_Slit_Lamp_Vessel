@@ -142,6 +142,8 @@ def run():
 	
 	input_array = np.array(input).astype(np.uint8)
 	mask_array = np.array(mask_in).astype(np.uint8)
+
+	st.write(mask_array.shape)
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	model = load_model(device)
