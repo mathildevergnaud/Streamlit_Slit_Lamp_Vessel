@@ -24,7 +24,7 @@ def run():
         uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
         st.write(uploaded_Mask)
         if uploaded_Mask:
-            for file in uploaded_files:
+            for file in uploaded_file:
                 img = Image.open(file)
                 st.session_state.segmentations[selected_image_key + "_mask"] = img
         
