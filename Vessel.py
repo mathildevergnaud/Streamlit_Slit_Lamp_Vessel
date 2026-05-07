@@ -24,6 +24,20 @@ def gaussian_2D(center, sig, size_im):
     gauss = np.exp((-1*(x-center[0])**2)/((sig**2)/2) + (-1*(y-center[1])**2)/((sig**2)/2))
     return 1-gauss
 
+def powder_trail_filter(img, tresh_high=0.9, tresh_low=0.1):#0.87 #0.25
+    img = img/img.max()
+    img_tops = (img>tresh_high)*255.0
+    img_tops = img_tops.astype(np.uint8)
+    img_hills = (img>tresh_low)*255.0
+    img_hills = img_hills.astype(np.uint8)
+    
+    img_ = np.zeros(img.shape)
+    ret, markers = cv2.connectedComponents(img_hills)
+    for i in range(ret):
+        if np.sum(img_tops[markers==i])>0:
+            img_[markers==i]=1
+    return img_
+
 
 def run():
     st.title("Vessel Segmentation")
