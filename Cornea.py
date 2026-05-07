@@ -76,7 +76,7 @@ def run():
         st.write("Shape:", pred.shape)
         st.write("Dtype:", pred.dtype)
         
-        st.write(pred[0, 0])
+        st.write(pred[250, 250])
 
         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
         pred = encompasse_cornea(pred)
