@@ -2,6 +2,25 @@ import streamlit as st
 
 from PIL import Image
 
+def load_model(device):
+    net = build_model().to(device)
+    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
+    net.eval()
+    return net
+
+def build_model():
+    return DynUNet(
+        spatial_dims=2,
+        in_channels=3,
+        out_channels=1,
+        kernel_size=[(3, 3)] * 5,
+        strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
+        upsample_kernel_size=[(2, 2)] * 4,
+        norm_name="BATCH",
+        dropout=0.2)
+
+
+
 def run():
     st.title("Vessel Segmentation")
 
