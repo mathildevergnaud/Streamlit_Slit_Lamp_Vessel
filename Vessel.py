@@ -22,8 +22,7 @@ def build_model():
     kernel_size=[(3, 3), (3, 3), (3, 3),(3,3), (3,3)],
     strides=[(1, 1), (2, 2), (2, 2),(2,2),(2,2)],           
     upsample_kernel_size=[(2, 2), (2,2),(2,2),(2,2)],
-    norm_name="BATCH",     
-    ).to(device)
+    norm_name="BATCH")
 
 def gaussian_2D(center, sig, size_im):
     x, y = np.meshgrid(np.linspace(0, size_im[1], size_im[1]), np.linspace(0, size_im[0], size_im[0]))
