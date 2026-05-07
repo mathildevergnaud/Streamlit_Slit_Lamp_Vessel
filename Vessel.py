@@ -4,6 +4,10 @@ from PIL import Image
 import numpy as np
 import cv2
 
+import torch
+
+from monai.networks.nets import DynUNet
+
 def load_model(device):
     net = build_model().to(device)
     net.load_state_dict(torch.load("./utils/vessel/model.pt", map_location=device))
