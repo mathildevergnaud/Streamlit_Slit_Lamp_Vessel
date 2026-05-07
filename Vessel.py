@@ -4,20 +4,20 @@ from PIL import Image
 
 def load_model(device):
     net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
+    net.load_state_dict(torch.load("./utils/vessel/model.pt", map_location=device))
     net.eval()
     return net
 
 def build_model():
     return DynUNet(
-        spatial_dims=2,
-        in_channels=3,
-        out_channels=1,
-        kernel_size=[(3, 3)] * 5,
-        strides=[(1, 1), (2, 2), (2, 2), (2, 2), (2, 2)],
-        upsample_kernel_size=[(2, 2)] * 4,
-        norm_name="BATCH",
-        dropout=0.2)
+    spatial_dims=2,
+    in_channels=4,
+    out_channels=1,
+    kernel_size=[(3, 3), (3, 3), (3, 3),(3,3), (3,3)],
+    strides=[(1, 1), (2, 2), (2, 2),(2,2),(2,2)],           
+    upsample_kernel_size=[(2, 2), (2,2),(2,2),(2,2)],
+    norm_name="BATCH",     
+    ).to(device)
 
 def gaussian_2D(center, sig, size_im):
     x, y = np.meshgrid(np.linspace(0, size_im[1], size_im[1]), np.linspace(0, size_im[0], size_im[0]))
@@ -55,12 +55,13 @@ def flt32_to_unint8(img):
    #print(img.min(),img.max())
     return np.round((((img - img.min())/(img.max()-img.min()) * 255)).astype(np.uint8)) #img.astype(numpy.uint8)#
 
-def cut_im_2(image_in, mask_in, size_im, device = 'cpu'):
+def cut_im_2(image_in, mask_in, device = 'cpu'):
 
     global x_im 
     global y_im
     global bordure
 
+	size_im = (576,576)
     bordure = 100
         
 	cnt, _ = cv2.findContours((mask_in).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -73,8 +74,6 @@ def cut_im_2(image_in, mask_in, size_im, device = 'cpu'):
 	g = gaussian_2D(center, radius, mask_in.shape)
 
 	g = ((mask_in*g)/255.0).astype(np.float32)
-
-	im = np.array(im, dtype=np.float32)/255.0
 
 	im = np.concatenate((im, g[:,:,None]), axis=2)
 
@@ -149,3 +148,11 @@ def run():
 
 	input = st.st.session_state.images[selected_image_key]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
+
+	input_array = np.array(input).astype(np.float32)/255.0
+	mask_array = np.array(mask_in).astype(np.uint8)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = load_model(device)
+
+	
