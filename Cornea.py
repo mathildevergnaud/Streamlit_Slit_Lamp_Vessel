@@ -51,13 +51,34 @@ def run():
     if "segmentations" not in st.session_state:
         st.session_state.segmentations = {}
 
-    key = st.text_input("Image key")
-
-    if key:
-        seg_key = key + "_cornea"
-
-        if seg_key in st.session_state.segmentations:
-            st.image(st.session_state.segmentations[seg_key])
+         if selected_image_key:
+            
+            original_image = st.session_state.images[selected_image_key]
+            image = np.array(original_image).astype(np.uint8)
+            
+            img_array = np.array(original_image).astype(np.float32)/255.0
+            size= img_array.shape
+            
+            resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
+            
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            model = load_model(device)
+            
+            im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
+            
+            pred = torch.sigmoid(model(im))[0,0].cpu().detach().numpy()  
+            pred = (pred * 255).astype("uint8")
+    
+            pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)
+            pred = encompasse_cornea(pred)
+            
+            segmented_image = Image.fromarray(pred)
+            
+            Cornea_select = Image.fromarray(Cornea_Crop(image, pred))
+            #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
+            
+            st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
+            st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_select
         else:
-            st.info("No cornea result yet.")
+            st.sidebar.error("Please select an image first.")
     return result
