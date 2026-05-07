@@ -10,9 +10,12 @@ def run():
     st.write(selected_image_key)
         
     if selected_image_key:
-
-        if st.session_state.segmentations[selected_image_key + "_cornea"] :
-            st.write('Cornea Segmentation Done')
+        
+        if selected_image_key:
+            key = selected_image_key + "_cornea"
+            
+            if key in st.session_state.segmentations:
+                st.write('Cornea Segmentation Done')
 
 
         else : 
