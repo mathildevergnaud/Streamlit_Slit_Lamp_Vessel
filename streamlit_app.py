@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 from PIL import Image
 import numpy as np
@@ -34,32 +35,41 @@ if uploaded_files:
 
 selected_image_key = st.sidebar.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
 
-st.markdown("""
-<style>
-div.stButton > button {
-    height: 3em;
-    border-radius: 10px;
-    font-weight: bold;
-}
-</style>
-""", unsafe_allow_html=True)
+selected = option_menu(
+    menu_title=None,
+    options=["Main", "Cornea"],
+    icons=["house", "eye"],
+    orientation="horizontal",
+)
 
-col1, col2, col3 = st.columns([1, 1, 6])
+if selected == "Main":
+    st.write('main')
 
-with col1:
-    if st.button("🏠 Main", use_container_width=True):
-        st.write('main')
-        #st.switch_page("main.py")
-
-with col2:
-    if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",),use_container_width=True):
-        if st.session_state.page == "cornea":
+elif selected == "Cornea":
+    if st.session_state.page == "cornea":
             cornea.run()
 
-with col3:
-    if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",),use_container_width=True):
-        if st.session_state.page == "vessel":
+elif selected == "Vessel":
+    if st.session_state.page == "vessel":
             vessel.run()
+
+
+# col1, col2, col3 = st.columns([1, 1, 6])
+
+# with col1:
+#     if st.button("🏠 Main", use_container_width=True):
+#         st.write('main')
+#         #st.switch_page("main.py")
+
+# with col2:
+#     if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",),use_container_width=True):
+#         if st.session_state.page == "cornea":
+#             cornea.run()
+
+# with col3:
+#     if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",),use_container_width=True):
+#         if st.session_state.page == "vessel":
+#             vessel.run()
     
     #     # st.session_state.vessel_mode = "menu"
     #     # st.sidebar.write("Choose option:")
