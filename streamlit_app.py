@@ -42,12 +42,12 @@ with col1:
         #st.switch_page("main.py")
 
 with col2:
-    if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",)):
+    if st.button("Cornea Segmentation", on_click=set_page, args=("cornea",),use_container_width=True):
         if st.session_state.page == "cornea":
             cornea.run()
 
 with col3:
-    if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",)):
+    if st.button("Vessel Segmentation", on_click=set_page, args=("vessel",),use_container_width=True):
         if st.session_state.page == "vessel":
             vessel.run()
     
