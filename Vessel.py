@@ -18,5 +18,5 @@ def run():
                 st.write('Cornea Segmentation Done')
 
 
-        else : 
-            st.write('Missing Cornea Selection')
+            else : 
+                st.write('Missing Cornea Selection')
