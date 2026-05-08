@@ -55,10 +55,10 @@ if selected == "Main":
 
 
 if st.session_state.page == "Cornea":
-            cornea.run()
+            cornea.run(selected_image_key)
 
 if st.session_state.page == "Vessel":
-            vessel.run()
+            vessel.run(selected_image_key)
 
 
 # col1, col2, col3 = st.columns([1, 1, 6])
