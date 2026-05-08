@@ -51,15 +51,25 @@ if selected == "Main":
             img = Image.open(file)
             st.session_state.images[file.name] = img
 
-    selected_image_key = st.radio("Select an image:", list(st.session_state.images.keys()), key="image_select")
+if st.session_state.images:
+        st.session_state.selected_image_key = st.radio(
+            "Select an image:",
+            list(st.session_state.images.keys()),
+            key="image_select"
+        )
 
 
 if st.session_state.page == "Cornea":
-            cornea.run(selected_image_key)
+    if "selected_image_key" in st.session_state:
+        cornea.run(st.session_state.selected_image_key)
+    else:
+        st.warning("Please upload and select an image first.")
 
 if st.session_state.page == "Vessel":
-            vessel.run(selected_image_key)
-
+    if "selected_image_key" in st.session_state:
+        vessel.run(st.session_state.selected_image_key)
+    else:
+        st.warning("Please upload and select an image first.")
 
 # col1, col2, col3 = st.columns([1, 1, 6])
 
