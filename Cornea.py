@@ -49,7 +49,7 @@ def Cornea_Crop(image, mask):
     return cv2.bitwise_and(image, image, mask=mask)
 
 
-def run():
+def run(selected_image_key):
     st.title("Cornea Segmentation")
 
     if "segmentations" not in st.session_state:
