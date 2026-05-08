@@ -156,10 +156,9 @@ def recfin_im_2(list_im):
 	image[image<0]=0
 	return image
 
-def run():
+def run(selected_image_key):
 	st.title("Vessel Segmentation")
-	
-	selected_image_key = st.session_state.get("image_select")
+
 	st.write(selected_image_key)
 	
 	st.write('Do you want to use the cornea segmentation or do you have already a mask ')
