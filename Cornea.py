@@ -10,7 +10,7 @@ from monai.networks.nets import DynUNet
 
 import cv2
 
-import .utils.cornea.utils_fct as fct
+import utils.cornea.utils_fct as fct
 
 def load_model(device):
     net = build_model().to(device)
