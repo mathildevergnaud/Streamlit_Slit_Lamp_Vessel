@@ -55,7 +55,6 @@ def run(selected_image_key):
     if "segmentations" not in st.session_state:
         st.session_state.segmentations = {}
 
-    selected_image_key = st.session_state.get("image_select")
     st.write(selected_image_key)
         
     if selected_image_key:
