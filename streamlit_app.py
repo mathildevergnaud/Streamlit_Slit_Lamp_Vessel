@@ -82,6 +82,7 @@ if selected == "Main":
             try:
                 img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
                 st.session_state.images[file.name] = image_bytes
+                st.session_state.images[file.name+'_or'] = img
             
             except Exception as e:
                 st.error(f"Error loading {file.name}: {e}")
