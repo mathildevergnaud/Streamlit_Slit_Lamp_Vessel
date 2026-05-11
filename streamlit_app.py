@@ -69,7 +69,7 @@ if selected == "Main":
             else:
                 st.session_state.images[file.name] = img
                 
-    if selected_image is not None: :
+    if selected_image is not None: 
         st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
         
     if selected_image_key and f"{selected_image_key}_cornea" in st.session_state.segmentations:
