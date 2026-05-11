@@ -66,6 +66,7 @@ if selected == "Main":
                 st.error(f"Skipping {file.name}: Not an RGB image (current mode: {img.mode}).")
             else:
                 st.session_state.images[file.name] = img
+                
     if st.session_state.selected_image_key :
         st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
 
