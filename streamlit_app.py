@@ -44,16 +44,16 @@ selected = option_menu(
 
 st.session_state.page = selected
 if st.session_state.images:
-        st.session_state.selected_image_key = st.radio(
-            "Select an image:",
-            list(st.session_state.images.keys()),
-            key="image_select"
-        )
+    st.session_state.selected_image_key = st.radio(
+        "Select an image:",
+        list(st.session_state.images.keys()),
+        key="image_select")
+    
     if st.session_state.selected_image_key:
-            selected_image = st.session_state.images[st.session_state.selected_image_key]
-            st.image(selected_image, 
-                    caption=f"Selected Image: {st.session_state.selected_image_key}",
-                    use_column_width=True)
+        selected_image = st.session_state.images[st.session_state.selected_image_key]
+        st.image(selected_image, 
+                caption=f"Selected Image: {st.session_state.selected_image_key}",
+                use_column_width=True)
 
 if selected == "Main":
     st.write('Images')
