@@ -61,7 +61,7 @@ def run(selected_image_key):
         
     if selected_image_key:
         
-        original_image = st.session_state.images[selected_image_key]
+        original_image = st.session_state.images[selected_image_key+'_or']
         st.image(original_image, caption="Segmented Image")
         
         np_image = np.array(original_image).astype(np.uint8)
