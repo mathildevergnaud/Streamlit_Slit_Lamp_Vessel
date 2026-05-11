@@ -214,6 +214,8 @@ def run(selected_image_key):
 	
 	output_image = (powder_trail_filter(recfin_im_2(outputs))*255).astype(np.uint8)
 	Vessel_seg = Image.fromarray(output_image)
+	
+	st.session_state.segmentations[selected_image_key + "_vessel"] = Vessel_seg
 	st.image(Vessel_seg, caption = 'Vessel')
 
 
