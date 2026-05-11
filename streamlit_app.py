@@ -43,6 +43,7 @@ selected = option_menu(
 )
 
 st.session_state.page = selected
+
 if st.session_state.images:
     st.session_state.selected_image_key = st.radio(
         "Select an image:",
