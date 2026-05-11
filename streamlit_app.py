@@ -80,7 +80,7 @@ if selected == "Main":
             image_bytes = file.read()
             
             try:
-                img = Image.open(io.BytesIO(image_bytes)).verify()
+                img = Image.open(io.BytesIO(image_bytes))
                 
                 if img.mode != "RGB":
                     img = img.convert("RGB")
