@@ -72,9 +72,6 @@ if selected == "Main":
     if selected_image is not None: :
         st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
         
-    if st.session_state.selected_image_key :
-        st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
-
     if selected_image_key and f"{selected_image_key}_cornea" in st.session_state.segmentations:
         st.image(st.session_state.segmentations[f"{selected_image_key}_cornea"], caption="Cornea Segmentation")
     else:
