@@ -69,18 +69,19 @@ if selected == "Main":
                 
     if st.session_state.selected_image_key :
         st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
-
-    if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-        st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-
-    else :
-        st.write('No cornea segmentation yet')
-
-    if selected_image_key and selected_image_key + "_vessel" in st.session_state.segmentations:
-        st.image(st.session_state.segmentations[selected_image_key + "_vessel"])
         
-    else :
-        st.write('No vessel segmentation yet')
+    if st.session_state.selected_image_key :
+        st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
+
+    if selected_image_key and f"{selected_image_key}_cornea" in st.session_state.segmentations:
+        st.image(st.session_state.segmentations[f"{selected_image_key}_cornea"], caption="Cornea Segmentation")
+    else:
+        st.write("No cornea segmentation yet")
+    
+    if selected_image_key and f"{selected_image_key}_vessel" in st.session_state.segmentations:
+        st.image(st.session_state.segmentations[f"{selected_image_key}_vessel"], caption="Vessel Segmentation")
+    else:
+        st.write("No vessel segmentation yet")
 
 if st.session_state.page == "Cornea":
     if "selected_image_key" in st.session_state:
