@@ -14,8 +14,9 @@ import cv2
 import Vessel as vessel
 import Cornea as cornea
 
-st.cache_data.clear()
+#st.cache_data.clear()
 st.cache_resource.clear()
+@st.cache_resource
 
 if "page" not in st.session_state:
     st.session_state.page = "Main"
