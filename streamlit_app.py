@@ -16,7 +16,7 @@ import Cornea as cornea
 
 #st.cache_data.clear()
 st.cache_resource.clear()
-st.cache_resource
+#st.cache_resource
 
 if "page" not in st.session_state:
     st.session_state.page = "Main"
@@ -50,7 +50,11 @@ if selected == "Main":
     if uploaded_files:
         for file in uploaded_files:
             img = Image.open(file)
-            st.session_state.images[file.name] = img
+            
+            if img.mode != 'RGB':
+                st.error(f"Skipping {file.name}: Not an RGB image (current mode: {img.mode}).")
+            else:
+                st.session_state.images[file.name] = img
 
 if st.session_state.images:
         st.session_state.selected_image_key = st.radio(
