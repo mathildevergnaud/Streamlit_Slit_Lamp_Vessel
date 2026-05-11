@@ -75,19 +75,19 @@ if selected == "Main":
     if uploaded_files:
 
         for file in uploaded_files:
-
+            image_bytes = file.read()
+            
             try:
-                img = Image.open(file)
-
+                img = Image.open(io.BytesIO(image_bytes)).verify()
+                
                 if img.mode != "RGB":
                     img = img.convert("RGB")
 
-                st.session_state.images[file.name] = img
-
+                st.session_state.images[file.name] = image_bytes
+            
             except Exception as e:
                 st.error(f"Error loading {file.name}: {e}")
 
-    # Show selected image
     if selected_image is not None:
 
         st.image(
