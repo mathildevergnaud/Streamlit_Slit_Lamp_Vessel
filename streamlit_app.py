@@ -42,6 +42,9 @@ selected = option_menu(
     default_index=page_index[st.session_state.page]
 )
 
+selected_image_key = None
+selected_image = None
+
 st.session_state.page = selected
 
 if st.session_state.images:
@@ -66,7 +69,7 @@ if selected == "Main":
             else:
                 st.session_state.images[file.name] = img
                 
-    if st.session_state.selected_image_key :
+    if selected_image is not None: :
         st.image(selected_image, caption=f"Selected Image: {st.session_state.selected_image_key}")
         
     if st.session_state.selected_image_key :
