@@ -80,11 +80,7 @@ if selected == "Main":
             image_bytes = file.read()
             
             try:
-                img = Image.open(io.BytesIO(image_bytes))
-                
-                if img.mode != "RGB":
-                    img = img.convert("RGB")
-
+                img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
                 st.session_state.images[file.name] = image_bytes
             
             except Exception as e:
