@@ -92,15 +92,15 @@ def run(selected_image_key):
         st.sidebar.error("Please select an image first.")
 
 
-    st.write("Segmentation Result:")
-    if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
-        st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
-    else:
-        st.write("No segmentation result yet.")
+    # st.write("Segmentation Result:")
+    # if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+    #     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
+    # else:
+    #     st.write("No segmentation result yet.")
     
-    st.write("Cornea:")
-    if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-        st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-    else:
-        st.write("No segmentation result yet.")
+    # st.write("Cornea:")
+    # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
+    #     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
+    # else:
+    #     st.write("No segmentation result yet.")
 
