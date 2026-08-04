@@ -29,6 +29,9 @@ if "page" not in st.session_state:
 if "selected_image_key" not in st.session_state:
     st.session_state.selected_image_key = None
 
+if "cornea_done" not in st.session_state:
+    st.session_state.cornea_done = False
+
 # # -------------------------------------------------
 # # Navigation
 # # -------------------------------------------------
@@ -80,9 +83,11 @@ with tab_single:
             run = st.button("Run segmentation", type="primary")
             if run:
                 try:
-                    vessel.run(selected_image_key)
+                    cornea.run(selected_image_key)
+                    st.session_state.cornea_done = True
                 except Exception as e:
-                    st.error(f"Vessel segmentation failed: {e}")
+                    st.error(f"Erreur : {e}")
+                    st.session_state.cornea_done = False
             
 
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
