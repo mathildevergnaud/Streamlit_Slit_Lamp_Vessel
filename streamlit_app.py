@@ -8,11 +8,14 @@ from streamlit_option_menu import option_menu
 import Vessel as vessel
 import Cornea as cornea
 
+USE_MODEL = "Use the model"
+USE_MANUAL = "Upload my own mask"
+
+
+
 st.set_page_config(page_title="Slit Lamp Vessel/Cornea Segmentation", layout="wide")
 
 st.title("Corneal vessel & cornea segmentation -- interactive preview")
-
-
 
 # -------------------------------------------------
 # Session State Initialization
