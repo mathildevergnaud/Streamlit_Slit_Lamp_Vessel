@@ -54,25 +54,28 @@ if selectable_keys:
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
 with tab_single:
-    st.caption(
-        "Upload one or a batch of images"
-    )
-
-    uploaded = uploaded_files = st.file_uploader(
+    st.caption("Upload one or a batch of images")
+    uploaded_files = st.file_uploader(
         "Upload images",
         accept_multiple_files=True,
         type=["jpg", "jpeg", "png"],
     )
 
-    if uploaded_files and selected_image is not None:
+    if uploaded_files:
+        new_files_added = False
         for file in uploaded_files:
-            image_bytes = file.read()
-            try:
-                img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-                st.session_state.images[file.name] = image_bytes
-                st.session_state.images[file.name + "_or"] = img
-            except Exception as e:
-                st.error(f"Error loading {file.name}: {e}")
+            if file.name not in st.session_state.images:
+                image_bytes = file.read()
+                try:
+                    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+                    st.session_state.images[file.name] = image_bytes
+                    st.session_state.images[file.name + "_or"] = img
+                    new_files_added = True
+                except Exception as e:
+                    st.error(f"Error loading {file.name}: {e}")
+
+        if new_files_added:
+            st.rerun() 
                 
         col_v, col_c = st.columns(2)
         with col_v:
