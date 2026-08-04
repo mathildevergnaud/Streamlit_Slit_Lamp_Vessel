@@ -36,6 +36,20 @@ if "cornea_done" not in st.session_state:
 
 st.sidebar.header("Image Selection")
 
+selectable_keys = [k for k in st.session_state.images if not k.endswith("_or")]
+
+selected_image_key = None
+selected_image = None
+
+if selectable_keys:
+    selected_image_key = st.radio(
+        "Select an image:",
+        selectable_keys,
+        key="image_select",
+    )
+    st.session_state.selected_image_key = selected_image_key
+    selected_image = st.session_state.images.get(selected_image_key)
+
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
 with tab_single:
@@ -49,7 +63,7 @@ with tab_single:
         type=["jpg", "jpeg", "png"],
     )
 
-    if uploaded_files:
+    if uploaded_files and selected_image is not None::
         for file in uploaded_files:
             image_bytes = file.read()
             try:
