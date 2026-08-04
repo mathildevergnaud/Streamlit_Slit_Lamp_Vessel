@@ -157,7 +157,6 @@ def recfin_im_2(list_im):
 	return image
 
 def run(selected_image_key):
-	st.title("Vessel Segmentation")
 
 	# st.write(selected_image_key)
 	
