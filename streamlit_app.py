@@ -104,6 +104,18 @@ with tab_single:
                     cornea.run(selected_image_key)
                     st.session_state.cornea_done = True
 
+                    st.write("Segmentation Result:")
+                    if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+                        st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
+                    else:
+                        st.write("No segmentation result yet.")
+    
+    st.write("Cornea:")
+    if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
+        st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
+    else:
+        st.write("No segmentation result yet.")
+
                     if st.session_state.cornea_done == True:
                         vessel.run(selected_image_key)
                         
