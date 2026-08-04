@@ -63,7 +63,7 @@ with tab_single:
         type=["jpg", "jpeg", "png"],
     )
 
-    if uploaded_files and selected_image is not None::
+    if uploaded_files and selected_image is not None:
         for file in uploaded_files:
             image_bytes = file.read()
             try:
