@@ -33,19 +33,24 @@ tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
 with tab_single:
     st.caption(
-        "Upload one flatmount image, choose per channel whether to use the "
-        "trained model or your own manual mask, see the overlay, and "
-        "optionally compute morphometry."
+        "Upload one or a batch of images"
     )
 
-    uploaded = st.file_uploader("Upload an image (PNG/JPG/TIFF)", type=IMAGE_TYPES, key="single_upload")
+    uploaded = uploaded_files = st.file_uploader(
+        "Upload images",
+        accept_multiple_files=True,
+        type=["jpg", "jpeg", "png"],
+    )
 
-    if uploaded is None:
-        st.info("Upload an image to get started.")
-    else:
-        image_bytes = uploaded.getvalue()
-        image_arr = load_image_gray(io.BytesIO(image_bytes))
-        st.image(image_arr, caption=f"Uploaded image ({image_arr.shape[1]}x{image_arr.shape[0]}px)", width=500)
+    if uploaded_files:
+        for file in uploaded_files:
+            image_bytes = file.read()
+            try:
+                img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+                st.session_state.images[file.name] = image_bytes
+                st.session_state.images[file.name + "_or"] = img
+            except Exception as e:
+                st.error(f"Error loading {file.name}: {e}")
 
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
