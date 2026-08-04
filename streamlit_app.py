@@ -110,10 +110,8 @@ with tab_single:
 
                     st.write("Segmentation Result:")
                     if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
-                        st.write("Vessel okay")
                         st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Segmented Image")
-                    else:
-                        st.write("No segmentation result yet.")
+                        vessel.run(selected_image_key)
                         
                 except Exception as e:      
                     st.error(f"Erreur : {e}")
