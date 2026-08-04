@@ -25,7 +25,7 @@ if "segmentations" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Main"
 if "selected_image_key" not in st.session_state:
-    st.session_state.selected_image_key = None
+    st.sidebar.selected_image_key = None
 
 if "cornea_done" not in st.session_state:
     st.session_state.cornea_done = False
@@ -47,8 +47,8 @@ if selectable_keys:
         selectable_keys,
         key="image_select",
     )
-    st.sidebar.session_state.selected_image_key = selected_image_key
-    selected_image = st.sidebar.session_state.images.get(selected_image_key)
+    st.sidebar.selected_image_key = selected_image_key
+    selected_image = st.sidebar.images.get(selected_image_key)
 
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
