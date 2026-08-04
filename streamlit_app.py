@@ -101,7 +101,7 @@ with tab_single:
             run = st.button("Run segmentation", type="primary")
             if run:
                 try:
-                    mask, cornea = cornea.run(selected_image_key)   
+                    cornea, mask = cornea.run(selected_image_key)   
                     
                     st.session_state.segmentations[selected_image_key + "_mask"] = mask
                     st.session_state.segmentations[selected_image_key + "_cornea"] = cornea
