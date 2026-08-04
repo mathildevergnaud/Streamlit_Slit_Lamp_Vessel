@@ -57,6 +57,11 @@ with tab_single:
         "Option": ["Cornea Segmentation", "Vessel Segmentation", "Morphometric analyses"]
     })
 
+    selected_products = []
+    for product in df["Produit"]:
+        if st.checkbox(f"Sélectionner {product}"):
+            selected_products.append(product)
+
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
 # selected = option_menu(
