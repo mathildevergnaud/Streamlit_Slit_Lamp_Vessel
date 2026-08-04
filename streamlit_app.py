@@ -52,6 +52,10 @@ with tab_single:
             except Exception as e:
                 st.error(f"Error loading {file.name}: {e}")
 
+    df = pd.DataFrame({
+        "Option": ["Cornea Segmentation", "Vessel Segmentation", "Morphometric analyses"]
+    })
+
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
 # selected = option_menu(
