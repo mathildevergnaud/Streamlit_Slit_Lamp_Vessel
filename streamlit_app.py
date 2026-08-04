@@ -2,7 +2,7 @@ import io
 
 import streamlit as st
 from PIL import Image
-import panda as pd
+import pandas as pd
 from streamlit_option_menu import option_menu
 
 import Vessel as vessel
