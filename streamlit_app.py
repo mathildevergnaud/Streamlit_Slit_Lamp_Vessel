@@ -72,7 +72,18 @@ with tab_single:
                     "Manual cornea mask", type=IMAGE_TYPES, key="manual_cornea"
                 )
 
-        needs_model = (vessel_choice == USE_MODEL) or (cornea_choice == USE_MODEL)
+        needs_both = (vessel_choice == USE_MODEL) and (cornea_choice == USE_MODEL)
+
+        needs_vessel = (vessel_choice == USE_MODEL) and (cornea_choice == USE_MANUAL)
+
+        if needs_both:
+            run = st.button("Run segmentation", type="primary")
+            if run:
+                try:
+                    vessel.run(selected_image_key)
+                except Exception as e:
+                    st.error(f"Vessel segmentation failed: {e}")
+            
 
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
