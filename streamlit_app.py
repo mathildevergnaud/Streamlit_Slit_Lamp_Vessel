@@ -28,6 +28,25 @@ if "selected_image_key" not in st.session_state:
 # # -------------------------------------------------
 # # Navigation
 # # -------------------------------------------------
+
+tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
+
+with tab_single:
+    st.caption(
+        "Upload one flatmount image, choose per channel whether to use the "
+        "trained model or your own manual mask, see the overlay, and "
+        "optionally compute morphometry."
+    )
+
+    uploaded = st.file_uploader("Upload an image (PNG/JPG/TIFF)", type=IMAGE_TYPES, key="single_upload")
+
+    if uploaded is None:
+        st.info("Upload an image to get started.")
+    else:
+        image_bytes = uploaded.getvalue()
+        image_arr = load_image_gray(io.BytesIO(image_bytes))
+        st.image(image_arr, caption=f"Uploaded image ({image_arr.shape[1]}x{image_arr.shape[0]}px)", width=500)
+
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
 # selected = option_menu(
