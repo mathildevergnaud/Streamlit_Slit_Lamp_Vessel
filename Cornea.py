@@ -83,7 +83,7 @@ def run(selected_image_key):
         
         segmented_image = Image.fromarray(pred)
         
-        Cornea_select = Image.fromarray(fct.Cornea_Crop(np_image, pred))
+        cornea_select = Image.fromarray(fct.Cornea_Crop(np_image, pred))
         #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
 
         return segmented_image, cornea_selected
