@@ -159,38 +159,38 @@ def recfin_im_2(list_im):
 def run(selected_image_key):
 	st.title("Vessel Segmentation")
 
-	st.write(selected_image_key)
+	# st.write(selected_image_key)
 	
-	st.write('Do you want to use the cornea segmentation or do you have already a mask ')
+	# st.write('Do you want to use the cornea segmentation or do you have already a mask ')
 	
-	selected_option = st.radio(
-	"Select an option:",
-	["Segmentation", "Mask"],
-	horizontal=True )
+	# selected_option = st.radio(
+	# "Select an option:",
+	# ["Segmentation", "Mask"],
+	# horizontal=True )
 	
-	st.write(f"Selected: {selected_option}")
-	if selected_option == 'Mask':
-		uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
+	# st.write(f"Selected: {selected_option}")
+	#if selected_option == 'Mask':
+	# uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
+
+	# if uploaded_mask is None:
+	# 	st.info("Please upload a mask image.")
+	# 	st.stop()
 	
-		if uploaded_mask is None:
-			st.info("Please upload a mask image.")
-			st.stop()
-		
-		else:
-			st.write(f"Filename: {uploaded_Mask.name}")
-			img = Image.open(uploaded_Mask)
-			st.session_state.segmentations[selected_image_key + "_mask"] = img
-			st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
+	# else:
+	# 	st.write(f"Filename: {uploaded_Mask.name}")
+	# 	img = Image.open(uploaded_Mask)
+	# 	st.session_state.segmentations[selected_image_key + "_mask"] = img
+	# 	st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
 			
-	elif selected_option == 'Segmentation'  :
-		key = selected_image_key + "_cornea"
-		if key in st.session_state.segmentations:
-			st.write('Cornea Segmentation Done')
-			st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-			st.session_state.segmentations[selected_image_key + "_mask"] = st.session_state.segmentations[selected_image_key + "_cornea"] 
-		else:
-			st.write('Please run cornea segmentation before')
-			st.stop()
+	# elif selected_option == 'Segmentation'  :
+	# 	key = selected_image_key + "_cornea"
+	# 	if key in st.session_state.segmentations:
+	# 		st.write('Cornea Segmentation Done')
+	# 		st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
+	# 		st.session_state.segmentations[selected_image_key + "_mask"] = st.session_state.segmentations[selected_image_key + "_cornea"] 
+	# 	else:
+	# 		st.write('Please run cornea segmentation before')
+	# 		st.stop()
 
 	input = st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
