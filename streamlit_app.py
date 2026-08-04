@@ -113,6 +113,9 @@ with tab_single:
                         st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
                     else:
                         st.write("No segmentation result yet.")
+                        
+                except Exception as e:      
+                    st.error(f"Erreur : {e}")
     
     # st.write("Cornea:")
     # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
