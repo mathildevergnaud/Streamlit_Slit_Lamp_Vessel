@@ -205,6 +205,8 @@ def run(selected_image_key):
 
 	imagette = cut_im_2(input_array, mask_array, device)
 
+	st.write(len(imagette), imagette[0].shape)
+
 	outputs = []
 
 	for inp in imagette : 
