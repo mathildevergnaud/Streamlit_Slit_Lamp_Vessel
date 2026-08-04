@@ -58,7 +58,7 @@ with tab_single:
     })
 
     selected_products = []
-    for product in df["Produit"]:
+    for product in df["Option"]:
         if st.checkbox(f"Sélectionner {product}"):
             selected_products.append(product)
 
