@@ -48,7 +48,7 @@ if selectable_keys:
         key="image_select",
     )
     selected_image = st.session_state.images.get(selected_image_key)
-    st.session_state.selected_image_key = selected_images
+    st.session_state.selected_image_key = selected_image_key
 
 
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
