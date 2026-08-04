@@ -93,12 +93,19 @@ with tab_single:
                     "Manual cornea mask", type=IMAGE_TYPES, key="manual_cornea"
                 )
         try : 
-            st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask')
-            st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
-            st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
-        
+            st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
         except Exception as e:      
-            st.write(f"Erreur : {e}")
+            st.write(f"Misssing Mask")
+
+        try : 
+            st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+        except Exception as e:      
+            st.write(f"Misssing Cornea")
+
+        try :          
+            st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
+        except Exception as e:      
+            st.write(f"Misssing Vessl")
 
         needs_both = (vessel_choice == USE_MODEL) and (cornea_choice == USE_MODEL)
 
