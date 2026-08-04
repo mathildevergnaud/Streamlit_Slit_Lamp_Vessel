@@ -52,15 +52,24 @@ with tab_single:
                 st.session_state.images[file.name + "_or"] = img
             except Exception as e:
                 st.error(f"Error loading {file.name}: {e}")
+                
+        col_v, col_c = st.columns(2)
+        with col_v:
+            vessel_choice = st.radio("Vessels:", [USE_MODEL, USE_MANUAL], key="vessel_choice")
+            manual_vessel_file = None
+            if vessel_choice == USE_MANUAL:
+                manual_vessel_file = st.file_uploader(
+                    "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel"
+                )
+        with col_c:
+            cornea_choice = st.radio("Cornea:", [USE_MODEL, USE_MANUAL], key="cornea_choice")
+            manual_cornea_file = None
+            if cornea_choice == USE_MANUAL:
+                manual_cornea_file = st.file_uploader(
+                    "Manual cornea mask", type=IMAGE_TYPES, key="manual_cornea"
+                )
 
-    df = pd.DataFrame({
-        "Option": ["Cornea Segmentation", "Vessel Segmentation", "Morphometric analyses"]
-    })
-
-    selected_products = []
-    for product in df["Option"]:
-        if st.checkbox(f"Sélectionner {product}"):
-            selected_products.append(product)
+        needs_model = (vessel_choice == USE_MODEL) or (cornea_choice == USE_MODEL)
 
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
 
