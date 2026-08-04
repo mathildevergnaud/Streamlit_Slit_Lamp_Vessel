@@ -114,18 +114,18 @@ with tab_single:
                     else:
                         st.write("No segmentation result yet.")
     
-    st.write("Cornea:")
-    if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-        st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-    else:
-        st.write("No segmentation result yet.")
+    # st.write("Cornea:")
+    # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
+    #     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
+    # else:
+    #     st.write("No segmentation result yet.")
 
-                    if st.session_state.cornea_done == True:
-                        vessel.run(selected_image_key)
+    #                 if st.session_state.cornea_done == True:
+    #                     vessel.run(selected_image_key)
                         
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
-                    st.session_state.cornea_done = False
+    #             except Exception as e:
+    #                 st.error(f"Erreur : {e}")
+    #                 st.session_state.cornea_done = False
 
                 
             
