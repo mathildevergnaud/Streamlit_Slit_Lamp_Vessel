@@ -10,6 +10,7 @@ import Cornea as cornea
 
 USE_MODEL = "Use the model"
 USE_MANUAL = "Upload my own mask"
+USE_IN_MEMORY = "Already in memory"
 
 st.set_page_config(page_title="Slit Lamp Vessel/Cornea Segmentation", layout="wide")
 
@@ -79,13 +80,26 @@ with tab_single:
                 
         col_v, col_c = st.columns(2)
         with col_v:
-            vessel_choice = st.radio("Vessels:", [USE_MODEL, USE_MANUAL], key="vessel_choice")
-            manual_vessel_file = None
-            if vessel_choice == USE_MANUAL:
-                manual_vessel_file = st.file_uploader(
-                    "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel"
-                )
+            if selected_image_key + "_mask" in st.session_state.segmentations and selected_image_key + "_cornea" in st.session_state.segmentations : 
+                
+                vessel_choice = st.radio("Vessels:", [USE_MODEL, USE_MANUAL, USE_IN_MEMORY], key="vessel_choice")
+                manual_vessel_file = None
+                
+                if vessel_choice == USE_MANUAL:
+                    manual_vessel_file = st.file_uploader(
+                        "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel")
+            else :
+                
+                vessel_choice = st.radio("Vessels:", [USE_MODEL, USE_MANUAL], key="vessel_choice")
+                manual_vessel_file = None
+                
+                if vessel_choice == USE_MANUAL:
+                    manual_vessel_file = st.file_uploader(
+                        "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel")
+                
+                    
         with col_c:
+            
             cornea_choice = st.radio("Cornea:", [USE_MODEL, USE_MANUAL], key="cornea_choice")
             manual_cornea_file = None
             if cornea_choice == USE_MANUAL:
@@ -131,6 +145,7 @@ with tab_single:
                         
                 except Exception as e:      
                     st.error(f"Erreur : {e}")
+
     
     # st.write("Cornea:")
     # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
