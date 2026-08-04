@@ -85,11 +85,9 @@ def run(selected_image_key):
         
         Cornea_select = Image.fromarray(fct.Cornea_Crop(np_image, pred))
         #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
-        
-        st.session_state.segmentations[selected_image_key + "_segmented"] = segmented_image
-        st.session_state.segmentations[selected_image_key + "_cornea"] = Cornea_select
-    else:
-        st.sidebar.error("Please select an image first.")
+
+        return segmented_image, cornea_selected
+    
 
 
     # st.write("Segmentation Result:")
