@@ -96,9 +96,9 @@ with tab_single:
             st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask')
             st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
             st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
-
+        
         except Exception as e:      
-                    st.write(f"Erreur : {e}")
+            st.write(f"Erreur : {e}")
 
         needs_both = (vessel_choice == USE_MODEL) and (cornea_choice == USE_MODEL)
 
