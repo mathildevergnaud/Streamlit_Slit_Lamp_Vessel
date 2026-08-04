@@ -103,9 +103,15 @@ with tab_single:
                 try:
                     cornea.run(selected_image_key)
                     st.session_state.cornea_done = True
+
+                    if st.session_state.cornea_done == True:
+                        vessel.run(selected_image_key)
+                        
                 except Exception as e:
                     st.error(f"Erreur : {e}")
                     st.session_state.cornea_done = False
+
+                
             
 
 # PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
