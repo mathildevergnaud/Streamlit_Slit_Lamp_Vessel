@@ -101,11 +101,15 @@ with tab_single:
             run = st.button("Run segmentation", type="primary")
             if run:
                 try:
-                    cornea.run(selected_image_key)
+                    mask, cornea = cornea.run(selected_image_key)   
+                    
+                    st.session_state.segmentations[selected_image_key + "_mask"] = mask
+                    st.session_state.segmentations[selected_image_key + "_cornea"] = cornea
+                    
                     st.session_state.cornea_done = True
 
                     st.write("Segmentation Result:")
-                    if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
+                    if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
                         st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
                     else:
                         st.write("No segmentation result yet.")
