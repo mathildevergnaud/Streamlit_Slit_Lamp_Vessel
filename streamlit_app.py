@@ -151,25 +151,25 @@ with tab_single:
             run = st.button("Run segmentation", type="primary")
             
             if run:
-            if manual_vessel_file :
-                image_bytes = file.read()
-                
-                try:
-                    mask = Image.open(io.BytesIO(image_bytes)).convert("L")
-                    st.session_state.segmentations[selected_image_key + "_mask"] = mask
-
-                    np_mask = np.array(mask).astype(np.float32)/255.0
-                    np_or = np.array(st.session_state.segmentations[selected_image_key+'_or']).astype(np.uint8)
+                if manual_vessel_file :
+                    image_bytes = file.read()
                     
-                    st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(cornea.Cornea_crop(np_or,np_mask))
-                    st.session_state.cornea_done = True
-
-                    if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
-                        vessel_seg = vessel.run(selected_image_key)	
-                        st.session_state.segmentations[selected_image_key + "_vessel"] = vessel_seg
+                    try:
+                        mask = Image.open(io.BytesIO(image_bytes)).convert("L")
+                        st.session_state.segmentations[selected_image_key + "_mask"] = mask
+    
+                        np_mask = np.array(mask).astype(np.float32)/255.0
+                        np_or = np.array(st.session_state.segmentations[selected_image_key+'_or']).astype(np.uint8)
                         
-                except Exception as e:      
-                    st.error(f"Erreur : {e}")
+                        st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(cornea.Cornea_crop(np_or,np_mask))
+                        st.session_state.cornea_done = True
+    
+                        if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
+                            vessel_seg = vessel.run(selected_image_key)	
+                            st.session_state.segmentations[selected_image_key + "_vessel"] = vessel_seg
+                            
+                    except Exception as e:      
+                        st.error(f"Erreur : {e}")
 
 
 
