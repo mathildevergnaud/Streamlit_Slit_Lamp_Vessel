@@ -149,6 +149,7 @@ with tab_single:
 
         if needs_vessel :
             run = st.button("Run segmentation", type="primary")
+            st.write('button okay')
             
             if run:
                 if manual_vessel_file :
