@@ -87,7 +87,7 @@ with tab_single:
                 
                 if vessel_choice == USE_MANUAL:
                     manual_vessel_file = st.file_uploader(
-                        "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel")
+                        "Manual vessel mask", type=["jpg", "jpeg", "png"], key="manual_vessel")
             else :
                 
                 vessel_choice = st.radio("Vessels:", [USE_MODEL, USE_MANUAL], key="vessel_choice")
@@ -95,7 +95,7 @@ with tab_single:
                 
                 if vessel_choice == USE_MANUAL:
                     manual_vessel_file = st.file_uploader(
-                        "Manual vessel mask", type=IMAGE_TYPES, key="manual_vessel")
+                        "Manual vessel mask", type=["jpg", "jpeg", "png"], key="manual_vessel")
                 
                     
         with col_c:
@@ -148,12 +148,7 @@ with tab_single:
 
         if needs_vessel :
             st.caption("Please upload the mask")
-            uploaded_files = st.file_uploader(
-                    "Upload images",
-                    accept_multiple_files=True,
-                    type=["jpg", "jpeg", "png"],
-                )
-            
+
 
     
     # st.write("Cornea:")
