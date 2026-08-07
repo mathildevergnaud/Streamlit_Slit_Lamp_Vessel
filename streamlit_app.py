@@ -152,7 +152,7 @@ with tab_single:
             st.write('button okay')
             
             if run:
-                if manual_vessel_file :
+                if manual_cornea_file :
                     image_bytes = file.read()
                     
                     try:
