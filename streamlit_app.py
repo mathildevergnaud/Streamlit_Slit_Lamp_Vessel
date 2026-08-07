@@ -147,7 +147,11 @@ with tab_single:
                     st.error(f"Erreur : {e}")
 
         if needs_vessel :
-            st.caption("Please upload the mask")
+            if manual_vessel_file :
+                image_bytes = file.read()
+                try:
+                    img = Image.open(io.BytesIO(image_bytes)).convert("L")
+                
 
 
     
