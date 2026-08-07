@@ -81,6 +81,8 @@ with tab_single:
 
         if new_files_added:
             st.rerun() 
+
+        st.image(st.session_state.segmentations[selected_image_key + "_or"], caption = 'Original') 
                 
         col_c, col_v = st.columns(2)
         with col_v:
