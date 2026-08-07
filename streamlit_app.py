@@ -104,7 +104,7 @@ with tab_single:
             manual_cornea_file = None
             if cornea_choice == USE_MANUAL:
                 manual_cornea_file = st.file_uploader(
-                    "Manual cornea mask", type=IMAGE_TYPES, key="manual_cornea"
+                    "Manual cornea mask", type=["jpg", "jpeg", "png"], key="manual_cornea"
                 )
         col_0, col_1, col_2 = st.columns(3)
         with col_0:
