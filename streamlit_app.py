@@ -146,6 +146,15 @@ with tab_single:
                 except Exception as e:      
                     st.error(f"Erreur : {e}")
 
+        if needs_vessel :
+            st.caption("Please upload the mask")
+            uploaded_files = st.file_uploader(
+                    "Upload images",
+                    accept_multiple_files=True,
+                    type=["jpg", "jpeg", "png"],
+                )
+            
+
     
     # st.write("Cornea:")
     # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
