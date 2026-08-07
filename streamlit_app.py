@@ -150,7 +150,8 @@ with tab_single:
             if manual_vessel_file :
                 image_bytes = file.read()
                 try:
-                    img = Image.open(io.BytesIO(image_bytes)).convert("L")
+                    mask = Image.open(io.BytesIO(image_bytes)).convert("L")
+                    st.session_state.segmentations[selected_image_key + "_mask"] = mask
                 
 
 
