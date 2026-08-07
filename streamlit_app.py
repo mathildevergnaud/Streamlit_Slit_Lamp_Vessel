@@ -1,8 +1,12 @@
 import io
 
 import streamlit as st
+
 from PIL import Image
 import pandas as pd
+import numpy as np
+
+
 from streamlit_option_menu import option_menu
 
 import Vessel as vessel
@@ -78,7 +82,7 @@ with tab_single:
         if new_files_added:
             st.rerun() 
                 
-        col_v, col_c = st.columns(2)
+        col_c, col_v = st.columns(2)
         with col_v:
             if selected_image_key + "_mask" in st.session_state.segmentations and selected_image_key + "_cornea" in st.session_state.segmentations : 
                 
