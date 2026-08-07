@@ -159,9 +159,19 @@ with tab_single:
                     st.session_state.segmentations[selected_image_key + "_mask"] = mask
 
                     np_mask = np.array(mask).astype(np.float32)/255.0
-                    np_or = np.array(st.session_state.segmentations[selected_image_key]).astype(np.uint8)
+                    np_or = np.array(st.session_state.segmentations[selected_image_key+'_or']).astype(np.uint8)
                     
-                    st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(cornea.Cornea_crop())
+                    st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(cornea.Cornea_crop(np_or,np_mask))
+                    st.session_state.cornea_done = True
+
+                    if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
+                        vessel_seg = vessel.run(selected_image_key)	
+                        st.session_state.segmentations[selected_image_key + "_vessel"] = vessel_seg
+                        
+                except Exception as e:      
+                    st.error(f"Erreur : {e}")
+
+
 
                 
 
