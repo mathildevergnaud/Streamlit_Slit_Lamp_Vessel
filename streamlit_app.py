@@ -131,6 +131,7 @@ with tab_single:
 
         if needs_both:
             run = st.button("Run segmentation", type="primary")
+            
             if run:
                 try:
                     mask, cornea_seg = cornea.run(selected_image_key)   
@@ -147,11 +148,21 @@ with tab_single:
                     st.error(f"Erreur : {e}")
 
         if needs_vessel :
+            run = st.button("Run segmentation", type="primary")
+            
+            if run:
             if manual_vessel_file :
                 image_bytes = file.read()
+                
                 try:
                     mask = Image.open(io.BytesIO(image_bytes)).convert("L")
                     st.session_state.segmentations[selected_image_key + "_mask"] = mask
+
+                    np_mask = np.array(mask).astype(np.float32)/255.0
+                    np_or = np.array(st.session_state.segmentations[selected_image_key]).astype(np.uint8)
+                    
+                    st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(cornea.Cornea_crop())
+
                 
 
 
