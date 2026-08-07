@@ -166,7 +166,8 @@ with tab_single:
                     try:
                         mask = Image.open(io.BytesIO(image_bytes)).convert("L")
                         st.session_state.segmentations[selected_image_key + "_mask"] = mask
-    
+
+                        st.write(mask.shape)
                         np_mask = np.array(mask).astype(np.float32)/255.0[:,:,0]
                         np_or = np.array(st.session_state.images[selected_image_key + "_or"]).astype(np.uint8)
                         
