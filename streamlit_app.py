@@ -3,6 +3,7 @@ import io
 import streamlit as st
 
 from PIL import Image
+import cv2
 import pandas as pd
 import numpy as np
 
@@ -170,18 +171,45 @@ with tab_single:
         with col_0:
             try : 
                 st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
+                success, encoded_mask = cv2.imencode(".png", mask_array)
+                
+                st.download_button(
+                    label="Download image",
+                    data=encoded_mask.tobytes(),
+                    file_name="mask_" + selected_image_key + ".png",
+                    mime="image/png",
+                )
+                
             except Exception as e:      
                 st.write(f"Misssing Mask")
 
         with col_1:
             try : 
                 st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+                success, encoded_cornea = cv2.imencode(".png", mask_array)
+                
+                st.download_button(
+                    label="Download image",
+                    data=encoded_cornea.tobytes(),
+                    file_name="mask_" + selected_image_key + ".png",
+                    mime="image/png",
+                )
+                
             except Exception as e:      
                 st.write(f"Misssing Cornea")
 
         with col_2:
             try :          
                 st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
+                success, encoded_vessel = cv2.imencode(".png", mask_array)
+                
+                st.download_button(
+                    label="Download image",
+                    data=encoded_vessel.tobytes(),
+                    file_name="mask_" + selected_image_key + ".png",
+                    mime="image/png",
+                )
+                
             except Exception as e:      
                 st.write(f"Misssing Vessl")
 
