@@ -45,6 +45,8 @@ def Cornea_Crop(image, mask):
 
     st.write("Shape:", mask.shape)
     st.write("Dtype:", mask.dtype)
+
+    st.write("Max:", np.max(mask))
     
     #st.write(image[820,1200])
     if mask.dtype != np.uint8:
