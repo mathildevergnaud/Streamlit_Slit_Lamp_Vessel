@@ -171,7 +171,9 @@ with tab_single:
         with col_0:
             try : 
                 st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
-                success, encoded_mask = cv2.imencode(".png", st.session_state.segmentations[selected_image_key + "_mask"],)
+
+                mask_arr = np.array(st.session_state.segmentations[selected_image_key + "_mask"])
+                success, encoded_mask = cv2.imencode(".png", mask_arr)
                 
                 st.download_button(
                     label="Download image",
@@ -186,7 +188,9 @@ with tab_single:
         with col_1:
             try : 
                 st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
-                success, encoded_cornea = cv2.imencode(".png", st.session_state.segmentations[selected_image_key + "_cornea"],)
+
+                cornea_arr = np.array(st.session_state.segmentations[selected_image_key + "_cornea"])
+                success, encoded_cornea = cv2.imencode(".png", cornea_arr)
                 
                 st.download_button(
                     label="Download image",
@@ -201,7 +205,9 @@ with tab_single:
         with col_2:
             try :          
                 st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
-                success, encoded_vessel = cv2.imencode(".png", st.session_state.segmentations[selected_image_key + "_vessel"],)
+
+                vessel_arr = np.array(st.session_state.segmentations[selected_image_key + "_vessel"])
+                success, encoded_vessel = cv2.imencode(".png", vessel_arr)
                 
                 st.download_button(
                     label="Download image",
