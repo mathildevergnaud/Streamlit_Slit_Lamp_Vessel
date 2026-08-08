@@ -161,7 +161,7 @@ with tab_single:
             
             if run:
                 if manual_cornea_file :
-                    image_bytes = file.read()
+                    image_bytes = manual_cornea_file.read()
                     
                     try:
                         mask = Image.open(io.BytesIO(image_bytes)).convert("L")
