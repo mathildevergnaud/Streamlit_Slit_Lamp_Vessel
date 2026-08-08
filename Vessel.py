@@ -193,13 +193,13 @@ def run(selected_image_key):
 
 	input = st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
-	st.write('Image shape : ', input.size, 'Mask shape :', mask_in.size)
-	st.write('Image dtype : ', input.dtype, 'Mask dtype :', mask_in.dtype)
-			
+	st.write('Image shape : ', input.size, 'Mask shape :', mask_in.size)			
 	
 	input_array = np.array(input).astype(np.uint8)
 	mask_array = np.array(mask_in).astype(np.uint8)
-
+	st.write('Image dtype : ', input_array.dtype, 'Mask dtype :', mask_array.dtype)
+	st.write('Image max : ',np.max(input_array), 'Mask dtype :', np.max(mask_array))
+	
 	#st.write(mask_array.shape)
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
