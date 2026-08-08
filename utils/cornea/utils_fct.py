@@ -40,8 +40,11 @@ def encompasse_cornea(cornea):
     return blank_image
 
 def Cornea_Crop(image, mask):
-    #st.write("Shape:", image.shape)
-    #st.write("Dtype:", image.dtype)
+    st.write("Shape:", image.shape)
+    st.write("Dtype:", image.dtype)
+
+    st.write("Shape:", mask.shape)
+    st.write("Dtype:", mask.dtype)
     
     #st.write(image[820,1200])
     if mask.dtype != np.uint8:
