@@ -168,7 +168,7 @@ with tab_single:
                         st.session_state.segmentations[selected_image_key + "_mask"] = mask
 
                         st.write(mask.size)
-                        np_mask = np.array(mask).astype(np.uint8)
+                        np_mask = np.array(mask)#.astype(np.uint8)
                         np_or = np.array(st.session_state.images[selected_image_key + "_or"]).astype(np.uint8)
                         
                         st.session_state.segmentations[selected_image_key + "_cornea"] = Image.fromarray(fct.Cornea_Crop(np_mask,np_or))
