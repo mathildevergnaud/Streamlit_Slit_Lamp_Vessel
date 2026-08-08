@@ -196,7 +196,6 @@ def run(selected_image_key):
 
 	st.write("Shape:", image.shape)
     st.write("Dtype:", image.dtype)
-
     st.write("Shape:", mask_in.shape)
     st.write("Dtype:", mask_in.dtype)
 	
