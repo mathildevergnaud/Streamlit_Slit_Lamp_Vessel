@@ -86,7 +86,7 @@ with tab_single:
             st.rerun() 
 
         st.write(selected_image_key, file.name)
-        st.image(st.session_state.images[selected_image_key + "_or"], caption='Original')
+        #st.image(st.session_state.images[selected_image_key + "_or"], caption='Original')
                 
         col_c, col_v = st.columns(2)
         with col_v:
