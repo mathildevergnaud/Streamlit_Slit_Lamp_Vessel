@@ -193,11 +193,9 @@ def run(selected_image_key):
 
 	input = st.session_state.segmentations[selected_image_key + "_cornea"]
 	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
-	
-	st.write("Shape:", image.shape)
-	st.write("Dtype:", image.dtype)
-	st.write("Shape:", mask_in.shape)
-    st.write("Dtype:", mask_in.dtype)
+	st.write('Image shape : ', input.shape, 'Mask shape :', mask_in.shape)
+	st.write('Image dtype : ', input.dtype, 'Mask dtype :', mask_in.dtype)
+			
 	
 	input_array = np.array(input).astype(np.uint8)
 	mask_array = np.array(mask_in).astype(np.uint8)
