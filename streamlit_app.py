@@ -115,24 +115,6 @@ with tab_single:
                 manual_cornea_file = st.file_uploader(
                     "Manual cornea mask", type=["jpg", "jpeg", "png"], key="manual_cornea"
                 )
-        col_0, col_1, col_2 = st.columns(3)
-        with col_0:
-            try : 
-                st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
-            except Exception as e:      
-                st.write(f"Misssing Mask")
-
-        with col_1:
-            try : 
-                st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
-            except Exception as e:      
-                st.write(f"Misssing Cornea")
-
-        with col_2:
-            try :          
-                st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
-            except Exception as e:      
-                st.write(f"Misssing Vessl")
 
         needs_both = (vessel_choice == USE_MODEL) and (cornea_choice == USE_MODEL)
 
@@ -152,6 +134,7 @@ with tab_single:
                     if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
                         vessel_seg = vessel.run(selected_image_key)	
                         st.session_state.segmentations[selected_image_key + "_vessel"] = vessel_seg
+                        st.rerun()
                         
                 except Exception as e:      
                     st.error(f"Erreur : {e}")
@@ -177,11 +160,30 @@ with tab_single:
                         if selected_image_key and selected_image_key + "_mask" in st.session_state.segmentations:
                             vessel_seg = vessel.run(selected_image_key)	
                             st.session_state.segmentations[selected_image_key + "_vessel"] = vessel_seg
+                            st.rerun()
                             
                     except Exception as e:      
                         st.error(f"Erreur : {e}")
 
+        
+        col_0, col_1, col_2 = st.columns(3)
+        with col_0:
+            try : 
+                st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
+            except Exception as e:      
+                st.write(f"Misssing Mask")
 
+        with col_1:
+            try : 
+                st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+            except Exception as e:      
+                st.write(f"Misssing Cornea")
+
+        with col_2:
+            try :          
+                st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
+            except Exception as e:      
+                st.write(f"Misssing Vessl")
 
                 
 
