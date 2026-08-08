@@ -80,7 +80,7 @@ def run(selected_image_key):
         pred = (pred * 255).astype("uint8")
         
         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)                
-        pred = fct.encompasse_cornea(pred)[:,:,0]
+        pred = fct.encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
         
