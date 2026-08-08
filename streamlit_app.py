@@ -176,7 +176,7 @@ with tab_single:
                 success, encoded_mask = cv2.imencode(".png", mask_arr)
                 
                 st.download_button(
-                    label="Download image",
+                    label="Download Mask",
                     data=encoded_mask.tobytes(),
                     file_name="mask_" + selected_image_key + ".png",
                     mime="image/png",
@@ -193,7 +193,7 @@ with tab_single:
                 success, encoded_cornea = cv2.imencode(".png", cornea_arr)
                 
                 st.download_button(
-                    label="Download image",
+                    label="Download Cornea",
                     data=encoded_cornea.tobytes(),
                     file_name="mask_" + selected_image_key + ".png",
                     mime="image/png",
@@ -210,7 +210,7 @@ with tab_single:
                 success, encoded_vessel = cv2.imencode(".png", vessel_arr)
                 
                 st.download_button(
-                    label="Download image",
+                    label="Download Vessel",
                     data=encoded_vessel.tobytes(),
                     file_name="mask_" + selected_image_key + ".png",
                     mime="image/png",
