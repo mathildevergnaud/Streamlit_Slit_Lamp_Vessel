@@ -83,6 +83,7 @@ with tab_single:
                     st.error(f"Error loading {file.name}: {e}")
 
         if new_files_added:
+            st.session_state.cornea_done = False
             st.rerun() 
 
         st.write(selected_image_key, file.name)
