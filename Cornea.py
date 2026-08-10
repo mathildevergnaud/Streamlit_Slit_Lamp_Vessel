@@ -53,7 +53,6 @@ def Cornea_Crop(image, mask):
 
 
 def run(selected_image_key):
-    st.title("Cornea Segmentation")
 
     if "segmentations" not in st.session_state:
         st.session_state.segmentations = {}

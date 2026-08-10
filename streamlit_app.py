@@ -229,6 +229,19 @@ with tab_single:
             except Exception as e:      
                 st.write(f"Misssing Vessl")
 
+        try : 
+            vessel_key = selected_image_key + "_vessel"
+            mask_key = selected_image_key + "_mask"
+
+            if vessel_key in st.session_state.segmentations or mask_key in st.session_state.segmentations:
+                run_quant = st.button("Run Quantification", type="primary")
+
+                if run_quant:
+                    st.write("Quantification done!")
+
+        except Exception as e :
+            st.write("")
+
                 
 
 
