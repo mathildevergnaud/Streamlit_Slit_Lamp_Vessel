@@ -21,7 +21,12 @@ USE_IN_MEMORY = "Already in memory"
 
 st.set_page_config(page_title="Slit Lamp Vessel/Cornea Segmentation", layout="wide")
 
-st.title("Corneal vessel & cornea segmentation -- interactive preview")
+st.title("Cornea neocorneavascularisation segmentation and analysis")
+st.caption("Please only use cornea slit-lamp images with a .jpg or .png format. \n "
+          " We proposed two versions : \n "
+          "- one where the user can add their one segmentatiom or use our model for each images \n"
+          "- The second option, it's a fully automated versiom the user can add all their images and the segmentations and quantifications is automatically done. \n")
+
 
 # -------------------------------------------------
 # Session State Initialization
@@ -43,6 +48,8 @@ if "cornea_done" not in st.session_state:
 # # -------------------------------------------------
 
 st.sidebar.header("Image Selection")
+st.sidebar.caption("Here, all the session images \n"
+"If you close the app every results will be erased")
 
 selectable_keys = [k for k in st.session_state.images if not k.endswith("_or")]
 
@@ -57,12 +64,14 @@ if selectable_keys:
     )
     selected_image = st.session_state.images.get(selected_image_key)
     st.session_state.selected_image_key = selected_image_key
+    #st.rerun() 
 
 
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
 with tab_single:
-    st.caption("Upload one or a batch of images")
+    st.caption("Upload one or a batch of images \n"
+               "For each images, please enter if you want to use the proposed segmentation or to use another segmentation.")
     uploaded_files = st.file_uploader(
         "Upload images",
         accept_multiple_files=True,
