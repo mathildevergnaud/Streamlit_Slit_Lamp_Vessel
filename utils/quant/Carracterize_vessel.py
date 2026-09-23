@@ -10,9 +10,6 @@ import PIL
 
 #from utils.quantification.create_graph import create_graph
 
-
-import matplotlib.pyplot as plt
-
 import csv
 import glob ,os
 from datetime import datetime
