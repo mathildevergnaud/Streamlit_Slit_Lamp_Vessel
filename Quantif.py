@@ -1,7 +1,9 @@
 import streamlit as st
 
-from PIL import Image
+from PIL import Image, ImageDraw
 import numpy as np
+import networkx as nx
+
 import cv2
 
 import torch
@@ -50,6 +52,67 @@ def percent_vessel(image_clock, image_vessel, part_clock=None, part='eyes'):
         return 0.0
 
     return countpixelvessel / countpixelcornea * 100
+
+
+ENDPOINT_COLOR = (179, 49, 2)     # "#B33102"
+JUNCTION_COLOR = (9, 68, 70)      # "#094446"
+
+def plot_image_quadrants_graph(original_img, part_clock, graph,
+                                quadrant_alpha=0.25, node_radius=4, edge_width=1):
+    """
+    original_img : PIL.Image (RGB)
+    part_clock   : np.ndarray or PIL.Image, color-coded quadrant map
+    graph        : networkx graph, node attr 'info' = [row, col], node attr '_endpoint'
+    Returns a PIL.Image ready for st.image()
+    """
+    orig = original_img.convert("RGB")
+    size = orig.size  # (width, height)
+
+    part_arr = np.array(part_clock)
+    if part_arr.shape[:2] != (size[1], size[0]):
+        part_arr = np.array(Image.fromarray(part_arr).resize(size))
+
+    orig_arr = np.array(orig).astype(np.float32)
+    composite = orig_arr.copy()
+
+    # Blend quadrant colors
+    for part, color in QUADRANT_COLORS.items():
+        mask = (
+            (part_arr[..., 0] == color[0]) &
+            (part_arr[..., 1] == color[1]) &
+            (part_arr[..., 2] == color[2])
+        )
+        for c in range(3):
+            composite[..., c] = np.where(
+                mask,
+                composite[..., c] * (1 - quadrant_alpha) + color[c] * quadrant_alpha,
+                composite[..., c],
+            )
+
+    composite_img = Image.fromarray(composite.astype(np.uint8))
+    draw = ImageDraw.Draw(composite_img)
+
+    # Node positions: 'info' is [row, col] -> PIL draws in (x, y) = (col, row)
+    pos = nx.get_node_attributes(graph, 'info')
+    pos_xy = {n: (coord[1], coord[0]) for n, coord in pos.items()}
+
+    # Draw edges first (so nodes sit on top)
+    for u, v in graph.edges():
+        if u in pos_xy and v in pos_xy:
+            draw.line([pos_xy[u], pos_xy[v]], fill=(255, 255, 255), width=edge_width)
+
+    # Draw nodes
+    for n in graph.nodes():
+        if n not in pos_xy:
+            continue
+        x, y = pos_xy[n]
+        color = ENDPOINT_COLOR if graph.nodes[n].get('_endpoint') else JUNCTION_COLOR
+        draw.ellipse(
+            [x - node_radius, y - node_radius, x + node_radius, y + node_radius],
+            fill=color,
+        )
+    return composite_img
+
 def run(selected_image_key):
 
 
@@ -64,6 +127,12 @@ def run(selected_image_key):
 	morpho_info = {}
 
 	gra = create_graph(vessel_array,mask_array, cornea_array)
+
+	overlay_img = plot_image_quadrants_graph(
+        st.session_state.images[selected_image_key + "_or"],
+        gra.part_clock,
+        gra.graph,
+    )
 
 	for part in ['eyes', 'middle', 'nasal', 'bottom', 'temporal', 'top']:
 
@@ -99,7 +168,7 @@ def run(selected_image_key):
 
 	# st.write(morpho_info)
 
-	return morpho_info
+	return morpho_info, overlay_img
 
 
 

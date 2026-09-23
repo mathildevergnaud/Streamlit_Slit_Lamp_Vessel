@@ -1,4 +1,5 @@
 import io
+import os
 
 import streamlit as st
 
@@ -15,6 +16,8 @@ import Cornea as cornea
 import Quantif as quantif
 
 import utils.cornea.utils_fct as fct
+
+import zipfile
 
 def reshape_morpho(morpho_info, parts):
     # Maps a metric's suffix to its category label
@@ -97,11 +100,16 @@ USE_IN_MEMORY = "Already in memory"
 st.set_page_config(page_title="Slit Lamp Vessel/Cornea Segmentation", layout="wide")
 
 st.title("Cornea neocorneavascularisation segmentation and morpho analysis")
+
+st.warning(
+    "This is a research tool under development, not to be used for patient care.",
+    icon="⚠️",
+)
+
 st.caption("Please only use cornea slit-lamp images with a .jpg or .png format. \n "
           " We proposed two versions : \n "
           "- one where the user can add their one segmentatiom or use our model for each images \n"
           "- The second option, it's a fully automated versiom the user can add all their images and the segmentations and quantifications is automatically done. \n")
-
 
 # -------------------------------------------------
 # Session State Initialization
@@ -117,6 +125,7 @@ if "selected_image_key" not in st.session_state:
 
 if "cornea_done" not in st.session_state:
     st.session_state.cornea_done = False
+
 
 # # -------------------------------------------------
 # # Navigation
@@ -145,12 +154,13 @@ if selectable_keys:
 tab_single, tab_batch = st.tabs(["Single image", "Batch processing"])
 
 with tab_single:
-    st.caption("Upload one or a batch of images \n"
+    st.caption("Upload one or a batch of images : \n"
                "For each images, please enter if you want to use the proposed segmentation or to use another segmentation.")
     uploaded_files = st.file_uploader(
         "Upload images",
         accept_multiple_files=True,
         type=["jpg", "jpeg", "png"],
+        key="uploader_single"
     )
 
     if uploaded_files:
@@ -170,8 +180,6 @@ with tab_single:
             st.session_state.cornea_done = False
             st.rerun() 
 
-        st.write(selected_image_key, file.name)
-        #st.image(st.session_state.images[selected_image_key + "_or"], caption='Original')
                 
         col_c, col_v = st.columns(2)
         with col_v:
@@ -278,14 +286,15 @@ with tab_single:
             col_0, col_1, col_2 = st.columns(3)
             with col_0:
                 try : 
-                    st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
 
-                    mask_arr = np.array(st.session_state.segmentations[selected_image_key + "_mask"])
-                    success, encoded_mask = cv2.imencode(".png", mask_arr)
+                    st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+
+                    cornea_arr = np.array(st.session_state.segmentations[selected_image_key + "_cornea"])
+                    success, encoded_cornea = cv2.imencode(".png", cornea_arr)
                     
                     st.download_button(
-                        label="Download Mask",
-                        data=encoded_mask.tobytes(),
+                        label="Download Cornea",
+                        data=encoded_cornea.tobytes(),
                         file_name="mask_" + selected_image_key + ".png",
                         mime="image/png",
                     )
@@ -295,14 +304,14 @@ with tab_single:
 
             with col_1:
                 try : 
-                    st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+                    st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
 
-                    cornea_arr = np.array(st.session_state.segmentations[selected_image_key + "_cornea"])
-                    success, encoded_cornea = cv2.imencode(".png", cornea_arr)
+                    mask_arr = np.array(st.session_state.segmentations[selected_image_key + "_mask"])
+                    success, encoded_mask = cv2.imencode(".png", mask_arr)
                     
                     st.download_button(
-                        label="Download Cornea",
-                        data=encoded_cornea.tobytes(),
+                        label="Download Mask",
+                        data=encoded_mask.tobytes(),
                         file_name="mask_" + selected_image_key + ".png",
                         mime="image/png",
                     )
@@ -334,140 +343,116 @@ with tab_single:
 
                     try : 
 
-                        morpho = quantif.run(selected_image_key)   
+                        morpho, composite  = quantif.run(selected_image_key)   
                         st.write("Quantification done!")
                         parts = ['eyes', 'middle', 'nasal', 'bottom', 'temporal', 'top']
-                        df_morpho = reshape_morpho(morpho, parts)
+                        df_morpho= reshape_morpho(morpho, parts)
 
-                        st.dataframe(df_morpho)
-                        #st.rerun()
+                        st.session_state.segmentations[selected_image_key + "_morpho"] = df_morpho
+                        st.session_state.segmentations[selected_image_key + "_composite_graph"] = composite
 
                     except Exception as e :
                         st.error(f"Something went wrong: {e}")
-                        st.exception(e)  # shows full traceback in the app
+                        st.exception(e) 
+
+            try :
+                st.image(st.session_state.segmentations[selected_image_key + "_composite_graph"], caption = 'Quadrant and graph')
+                st.dataframe(st.session_state.segmentations[selected_image_key + "_morpho"])
+        
+
+            except Exception as e:      
+                st.write(f"Misssing morphology analyse")                
 
         except Exception as e :
             st.error(f"Something went wrong: {e}")
-            st.exception(e)  # shows full traceback in the app
+            st.exception(e)  
 
-                
+with tab_batch:
+    st.caption("Upload one or a batch of images \n "
+               "The default segmentation will be used for every images.\n "
+               "At the end of the operations, you will be able to download the results")
+
+    uploaded_batch = st.file_uploader(
+        "Upload images",
+        accept_multiple_files=True,
+        type=["jpg", "jpeg", "png"],
+        key="uploader_batch",
+    )
+
+    if uploaded_batch:
+        # Load new files into session_state.images (same pattern as tab_single)
+        batch_keys = []
+        for file in uploaded_batch:
+            if file.name not in st.session_state.images:
+                image_bytes = file.read()
+                try:
+                    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+                    st.session_state.images[file.name] = image_bytes
+                    st.session_state.images[file.name + "_or"] = img
+                except Exception as e:
+                    st.error(f"Error loading {file.name}: {e}")
+            batch_keys.append(file.name)
+
+        run_batch = st.button("Run batch segmentation", type="primary", key="run_batch_button")
+
+        if run_batch:
+            progress = st.progress(0, text="Starting batch segmentation...")
+            errors = []
+
+            for i, key in enumerate(batch_keys):
+                progress.progress(
+                    (i) / len(batch_keys),
+                    text=f"Processing {key} ({i+1}/{len(batch_keys)})",
+                )
+                try:
+                    mask, cornea_seg = cornea.run(key)
+                    st.session_state.segmentations[key + "_mask"] = mask
+                    st.session_state.segmentations[key + "_cornea"] = cornea_seg
+
+                    vessel_seg = vessel.run(key)
+                    st.session_state.segmentations[key + "_vessel"] = vessel_seg
+
+                except Exception as e:
+                    errors.append((key, str(e)))
+
+            progress.progress(1.0, text="Batch segmentation done!")
+
+            if errors:
+                st.warning(f"{len(errors)} image(s) failed:")
+                for key, err in errors:
+                    st.write(f"- {key}: {err}")
+            else:
+                st.success(f"All {len(batch_keys)} images processed successfully!")
+
+            st.session_state["batch_done"] = True
+            st.session_state["batch_keys"] = batch_keys
 
 
-    
-    # st.write("Cornea:")
-    # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-    #     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-    # else:
-    #     st.write("No segmentation result yet.")
+        if st.session_state.get("batch_done") and st.session_state.get("batch_keys"):
 
-    #                 if st.session_state.cornea_done == True:
-    #                     vessel.run(selected_image_key)
-                        
-    #             except Exception as e:
-    #                 st.error(f"Erreur : {e}")
-    #                 st.session_state.cornea_done = False
+            def build_zip(keys):
+                buffer = io.BytesIO()
+                with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+                    for key in keys:
+                        for suffix in ["_mask", "_cornea", "_vessel"]:
+                            seg_key = key + suffix
+                            if seg_key in st.session_state.segmentations:
+                                img = st.session_state.segmentations[seg_key]
+                                arr = np.array(img)
+                                success, encoded = cv2.imencode(".png")
+                                if success:
+                                    filename = f"{os.path.splitext(key)[0]}{suffix}.png"
+                                    zf.writestr(filename, encoded.tobytes())
+                buffer.seek(0)
+                return buffer
 
-                
-            
+            zip_buffer = build_zip(st.session_state["batch_keys"])
 
-# PAGE_INDEX = {"Main": 0, "Cornea": 1, "Vessel": 2}
+            st.download_button(
+                label="Download all results (ZIP)",
+                data=zip_buffer,
+                file_name="batch_segmentation_results.zip",
+                mime="application/zip",
+                key="download_batch_zip",
+            )
 
-# selected = option_menu(
-#     menu_title=None,
-#     options=["Main", "Cornea", "Vessel"],
-#     icons=["house", "eye", "activity"],
-#     orientation="horizontal",
-#     default_index=PAGE_INDEX.get(st.session_state.page, 0),
-# )
-# st.session_state.page = selected
-
-# # -------------------------------------------------
-# # Image Selector
-# #
-# # NOTE: st.session_state.images stores TWO entries per uploaded file:
-# #   - "<filename>"      -> raw bytes (for display)
-# #   - "<filename>_or"    -> decoded PIL.Image (consumed internally by Cornea.py)
-# # The "_or" entries must NOT be offered as selectable "images" in the
-# # picker below, or every upload shows up twice (this was a bug in the
-# # original version).
-# # -------------------------------------------------
-# selectable_keys = [k for k in st.session_state.images if not k.endswith("_or")]
-
-# selected_image_key = None
-# selected_image = None
-
-# if selectable_keys:
-#     selected_image_key = st.radio(
-#         "Select an image:",
-#         selectable_keys,
-#         key="image_select",
-#     )
-#     st.session_state.selected_image_key = selected_image_key
-#     selected_image = st.session_state.images.get(selected_image_key)
-
-# # -------------------------------------------------
-# # MAIN PAGE
-# # -------------------------------------------------
-# if selected == "Main":
-#     uploaded_files = st.file_uploader(
-#         "Upload images",
-#         accept_multiple_files=True,
-#         type=["jpg", "jpeg", "png"],
-#     )
-
-#     if uploaded_files:
-#         for file in uploaded_files:
-#             image_bytes = file.read()
-#             try:
-#                 img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-#                 st.session_state.images[file.name] = image_bytes
-#                 st.session_state.images[file.name + "_or"] = img
-#             except Exception as e:
-#                 st.error(f"Error loading {file.name}: {e}")
-
-#     if selected_image is not None:
-#         st.image(selected_image, caption=f"Selected Image: {selected_image_key}")
-
-#         col1, col2 = st.columns(2)
-
-#         with col1:
-#             st.subheader("Cornea")
-#             cornea_key = f"{selected_image_key}_cornea"
-#             if cornea_key in st.session_state.segmentations:
-#                 st.image(st.session_state.segmentations[cornea_key], caption="Cornea Segmentation")
-#             else:
-#                 st.info("No cornea segmentation yet")
-
-#         with col2:
-#             st.subheader("Vessel")
-#             vessel_key = f"{selected_image_key}_vessel"
-#             if vessel_key in st.session_state.segmentations:
-#                 st.image(st.session_state.segmentations[vessel_key], caption="Vessel Segmentation")
-#             else:
-#                 st.info("No vessel segmentation yet")
-#     else:
-#         st.info("Upload one or more images to get started.")
-
-# # -------------------------------------------------
-# # CORNEA PAGE
-# # -------------------------------------------------
-# elif selected == "Cornea":
-#     if selected_image_key:
-#         try:
-#             cornea.run(selected_image_key)
-#         except Exception as e:
-#             st.error(f"Cornea segmentation failed: {e}")
-#     else:
-#         st.warning("Upload and select an image first.")
-
-# # -------------------------------------------------
-# # VESSEL PAGE
-# # -------------------------------------------------
-# elif selected == "Vessel":
-#     if selected_image_key:
-#         try:
-#             vessel.run(selected_image_key)
-#         except Exception as e:
-#             st.error(f"Vessel segmentation failed: {e}")
-#     else:
-#         st.warning("Upload and select an image first.")
