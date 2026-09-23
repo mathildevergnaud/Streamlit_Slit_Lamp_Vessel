@@ -4,8 +4,6 @@ import numpy
 
 from skimage import measure
 
-import matplotlib.pyplot as plt
-
 import os
 
 #import math
@@ -17,10 +15,6 @@ def test_in_the_midle(x, y, r , centeri, centerj):
     else: return False
 
 def test_bellow_the_line(x_h,y_h,x_b,y_b,ytest,xtest):
-
-    #newrefy0 = image.shape[1] - y0
-    #newrefy1 =image.shape[1] -  y1
-    #newrefytest = image.shape[1] - ytest #image.shape[1] - 
 
     a = (int(y_h)-int(y_b)) /(int(x_h)-int(x_b)) 
     b =-a*x_h+y_h 
@@ -40,9 +34,7 @@ class clock():
         self.define_clock()
 
     def define_clock (self):
-
-        #contours = measure.find_contours(self.image, 0.8)
-
+        
         box = cv2.boundingRect(self.image_clock)
 
         x_0 = box[0]+box[2]
@@ -56,8 +48,6 @@ class clock():
 
         cnt, _ = cv2.findContours((self.image_clock*255.0).astype(numpy.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        #print(len(cnt))
-        #print(cv2.minEnclosingCircle(cnt[1]))
         maxel = cnt[0]
         for el in cnt:
 
@@ -68,9 +58,6 @@ class clock():
 
             if el1[1] > el2[1] :
                 maxel = el
-                #print(cv2.minEnclosingCircle(maxel)[1]) 
-
-        #print(maxel)
 
         if cv2.contourArea(maxel) > 150:
             (x,y), radius = cv2.minEnclosingCircle(maxel)
@@ -78,13 +65,6 @@ class clock():
             self.radius = int(radius)
             #print('radius', self.radius)
             cv2.circle(self.image_clock, center, self.radius, (0,255,0), 2)
-            
-        
-
-        #x,y,w,h = cv2.boundingRect(self.image)
-        #cv2.rectangle(new_im,(x,y),(x+w,y+h),(0,255,0),5)
-        #plt.imshow(self.image)
-        #plt.show()
 
         for i in range (self.image_clock.shape[0]):
             for j in range (self.image_clock.shape[1]):
@@ -109,8 +89,6 @@ class clock():
                             
                         else:
                             new_im[i,j,] = [0,255,0]
-        # plt.imshow(new_im)
-        # plt.show()
 
         self.part_clock = new_im
 
