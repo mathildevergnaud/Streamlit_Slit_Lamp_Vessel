@@ -2,8 +2,6 @@ import skimage.measure
 import skimage.morphology
 from PIL import Image
 
-import matplotlib.cm as cm
-
 import networkx as nx
 import cv2
 
