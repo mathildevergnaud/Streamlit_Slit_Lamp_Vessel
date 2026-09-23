@@ -12,8 +12,83 @@ from streamlit_option_menu import option_menu
 
 import Vessel as vessel
 import Cornea as cornea
+import Quantif as quantif
 
 import utils.cornea.utils_fct as fct
+
+def reshape_morpho(morpho_info, parts):
+    # Maps a metric's suffix to its category label
+    CATEGORY_MAP = {
+        "lenght_": "Vessel Length",
+        "dia_": "Vessel Diameter",
+        "tor_": "Tortuosity",
+        "junction": "Junctions/Endpoints",
+        "endpoint": "Junctions/Endpoints",
+        "percent_vessel": "Vessel Density (%)",
+    }
+
+    def categorize(metric_name):
+        for prefix, category in CATEGORY_MAP.items():
+            if metric_name.startswith(prefix):
+                return category
+        return "Other"
+
+    rows = {}
+    for part in parts:
+        prefix = part + "_"
+        row = {}
+        for key, value in morpho_info.items():
+            if key.startswith(prefix):
+                metric_name = key[len(prefix):]  # e.g. "lenght_min"
+                category = categorize(metric_name)
+                row[(category, metric_name)] = value
+        rows[part] = row
+
+    df = pd.DataFrame.from_dict(rows, orient="index")
+    df.columns = pd.MultiIndex.from_tuples(df.columns, names=["Category", "Metric"])
+    df.index.name = "part"
+
+    # Optional: sort columns so categories are grouped together
+    df = df.sort_index(axis=1, level=0)
+
+    return df
+
+def make_overlay(original_img, cornea_mask, vessel_mask,
+                  cornea_color=(255, 255, 0), vessel_color=(255, 0, 0),
+                  cornea_alpha=0.10, vessel_alpha=0.25):
+    """
+    original_img : PIL.Image (RGB)
+    cornea_mask  : PIL.Image or np.ndarray, binary/grayscale mask (white = cornea)
+    vessel_mask  : PIL.Image or np.ndarray, binary/grayscale mask (white = vessel)
+    """
+    orig = original_img.convert("RGB")
+    size = orig.size  # (width, height)
+
+    def to_bool_mask(mask):
+        if not isinstance(mask, Image.Image):
+            mask = Image.fromarray(mask)
+        mask = mask.convert("L").resize(size)
+        return np.array(mask) > 127
+
+    orig_arr = np.array(orig).astype(np.float32)
+    cornea_bool = to_bool_mask(cornea_mask)
+    vessel_bool = to_bool_mask(vessel_mask)
+
+    result = orig_arr.copy()
+
+    for c in range(3):
+        result[..., c] = np.where(
+            cornea_bool,
+            result[..., c] * (1 - cornea_alpha) + cornea_color[c] * cornea_alpha,
+            result[..., c],
+        )
+        result[..., c] = np.where(
+            vessel_bool,
+            result[..., c] * (1 - vessel_alpha) + vessel_color[c] * vessel_alpha,
+            result[..., c],
+        )
+
+    return Image.fromarray(result.astype(np.uint8))
 
 USE_MODEL = "Use the model"
 USE_MANUAL = "Upload my own mask"
@@ -21,7 +96,7 @@ USE_IN_MEMORY = "Already in memory"
 
 st.set_page_config(page_title="Slit Lamp Vessel/Cornea Segmentation", layout="wide")
 
-st.title("Cornea neocorneavascularisation segmentation and analysis")
+st.title("Cornea neocorneavascularisation segmentation and morpho analysis")
 st.caption("Please only use cornea slit-lamp images with a .jpg or .png format. \n "
           " We proposed two versions : \n "
           "- one where the user can add their one segmentatiom or use our model for each images \n"
@@ -176,71 +251,104 @@ with tab_single:
                     except Exception as e:      
                         st.error(f"Erreur : {e}")
 
-        
-        col_0, col_1, col_2 = st.columns(3)
+        col_0, col_1 = st.columns(2)
         with col_0:
             try : 
-                st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
-
-                mask_arr = np.array(st.session_state.segmentations[selected_image_key + "_mask"])
-                success, encoded_mask = cv2.imencode(".png", mask_arr)
-                
-                st.download_button(
-                    label="Download Mask",
-                    data=encoded_mask.tobytes(),
-                    file_name="mask_" + selected_image_key + ".png",
-                    mime="image/png",
-                )
+                st.image(st.session_state.images[selected_image_key + "_or"], caption = 'Original Image') 
                 
             except Exception as e:      
-                st.write(f"Misssing Mask")
+                st.write(f"Misssing Original")
 
         with col_1:
             try : 
-                st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+                overlay_img = make_overlay(
+                            st.session_state.images[selected_image_key + "_or"],
+                            st.session_state.segmentations[selected_image_key + "_mask"],
+                            st.session_state.segmentations[selected_image_key + "_vessel"],
+                        )
+                st.image(overlay_img, caption="Cornea (yellow) + Vessel (red) overlay")
 
-                cornea_arr = np.array(st.session_state.segmentations[selected_image_key + "_cornea"])
-                success, encoded_cornea = cv2.imencode(".png", cornea_arr)
-                
-                st.download_button(
-                    label="Download Cornea",
-                    data=encoded_cornea.tobytes(),
-                    file_name="mask_" + selected_image_key + ".png",
-                    mime="image/png",
-                )
-                
-            except Exception as e:      
-                st.write(f"Misssing Cornea")
-
-        with col_2:
-            try :          
-                st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
-
-                vessel_arr = np.array(st.session_state.segmentations[selected_image_key + "_vessel"])
-                success, encoded_vessel = cv2.imencode(".png", vessel_arr)
-                
-                st.download_button(
-                    label="Download Vessel",
-                    data=encoded_vessel.tobytes(),
-                    file_name="mask_" + selected_image_key + ".png",
-                    mime="image/png",
-                )
-                
-            except Exception as e:      
-                st.write(f"Misssing Vessl")
+            except Exception as e:
+                st.write("Missing segmentation(s) for overlay")
 
         try : 
             vessel_key = selected_image_key + "_vessel"
             mask_key = selected_image_key + "_mask"
 
+            col_0, col_1, col_2 = st.columns(3)
+            with col_0:
+                try : 
+                    st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption = 'Mask') 
+
+                    mask_arr = np.array(st.session_state.segmentations[selected_image_key + "_mask"])
+                    success, encoded_mask = cv2.imencode(".png", mask_arr)
+                    
+                    st.download_button(
+                        label="Download Mask",
+                        data=encoded_mask.tobytes(),
+                        file_name="mask_" + selected_image_key + ".png",
+                        mime="image/png",
+                    )
+                    
+                except Exception as e:      
+                    st.write(f"Misssing Mask")
+
+            with col_1:
+                try : 
+                    st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption = 'Cornea')
+
+                    cornea_arr = np.array(st.session_state.segmentations[selected_image_key + "_cornea"])
+                    success, encoded_cornea = cv2.imencode(".png", cornea_arr)
+                    
+                    st.download_button(
+                        label="Download Cornea",
+                        data=encoded_cornea.tobytes(),
+                        file_name="mask_" + selected_image_key + ".png",
+                        mime="image/png",
+                    )
+                    
+                except Exception as e:      
+                    st.write(f"Misssing Cornea")
+
+            with col_2:
+                try :          
+                    st.image(st.session_state.segmentations[selected_image_key + "_vessel"], caption = 'Vessel')
+
+                    vessel_arr = np.array(st.session_state.segmentations[selected_image_key + "_vessel"])
+                    success, encoded_vessel = cv2.imencode(".png", vessel_arr)
+                    
+                    st.download_button(
+                        label="Download Vessel",
+                        data=encoded_vessel.tobytes(),
+                        file_name="mask_" + selected_image_key + ".png",
+                        mime="image/png",
+                    )
+
+                except Exception as e:      
+                    st.write(f"Misssing Vessl")
+
             if vessel_key in st.session_state.segmentations or mask_key in st.session_state.segmentations:
                 run_quant = st.button("Run Quantification", type="primary")
 
                 if run_quant:
-                    st.write("Quantification done!")
+
+                    try : 
+
+                        morpho = quantif.run(selected_image_key)   
+                        st.write("Quantification done!")
+                        parts = ['eyes', 'middle', 'nasal', 'bottom', 'temporal', 'top']
+                        df_morpho = reshape_morpho(morpho, parts)
+
+                        st.dataframe(df_morpho)
+                        #st.rerun()
+
+                    except Exception as e :
+                        st.error(f"Something went wrong: {e}")
+                        st.exception(e)  # shows full traceback in the app
 
         except Exception as e :
-            st.write("")
+            st.error(f"Something went wrong: {e}")
+            st.exception(e)  # shows full traceback in the app
 
                 
 

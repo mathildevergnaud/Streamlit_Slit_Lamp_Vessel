@@ -6,7 +6,6 @@ from skimage import measure
 
 import matplotlib.pyplot as plt
 
-#from utils.create_graph import create_graph
 import os
 
 #import math
@@ -57,7 +56,7 @@ class clock():
 
         cnt, _ = cv2.findContours((self.image_clock*255.0).astype(numpy.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        print(len(cnt))
+        #print(len(cnt))
         #print(cv2.minEnclosingCircle(cnt[1]))
         maxel = cnt[0]
         for el in cnt:
@@ -77,7 +76,7 @@ class clock():
             (x,y), radius = cv2.minEnclosingCircle(maxel)
             center = (int(x), int(y))
             self.radius = int(radius)
-            print('radius', self.radius)
+            #print('radius', self.radius)
             cv2.circle(self.image_clock, center, self.radius, (0,255,0), 2)
             
         
@@ -110,33 +109,11 @@ class clock():
                             
                         else:
                             new_im[i,j,] = [0,255,0]
-        plt.imshow(new_im)
-        plt.show()
+        # plt.imshow(new_im)
+        # plt.show()
 
         self.part_clock = new_im
 
-
-if __name__ == "__main__":
-    #g = create_graph() #03_020_HJN_LA_26_01_06.tiff')#test_im.tiff')06_060_MW_RA_08_03_07_2.tiff
-
-    for name in os.listdir("./figures/Image/"):
-        
-        cornea = PIL.Image.open("./figures/Mask_ROI/"+name).convert('L')
-        cornea = numpy.array(cornea)
-        
-        image = clock(cornea)
-        
-        orimage = PIL.Image.open("./figures/Image/"+name).convert('RGBA')
-        
-        
-        new_part = PIL.Image.fromarray(image.part_clock).convert('RGBA')
-        
-        cor_part = PIL.Image.blend(orimage, new_part, 0.1)
-
-        cor_part.save('03_017.png')
-        
-        plt.imshow(cor_part)
-        plt.show()
 
 
 
