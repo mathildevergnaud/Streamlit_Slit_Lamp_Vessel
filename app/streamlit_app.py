@@ -15,7 +15,7 @@ import Vessel as vessel
 import Cornea as cornea
 import Quantif as quantif
 
-import utils.cornea.utils_fct as fct
+#import utils.cornea.utils_fct as fct
 
 import zipfile
 

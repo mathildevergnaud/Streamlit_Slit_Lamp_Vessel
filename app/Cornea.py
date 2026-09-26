@@ -14,7 +14,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-import utils.cornea.utils_fct as fct
+#
 
 BASE_DIR = Path(__file__).resolve().parent 
 
@@ -84,7 +84,7 @@ def run(selected_image_key):
         resized_img = np.array(resize(img_array, (512, 512), anti_aliasing=True), dtype=np.float32)  
         
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = fct.load_model(device)
+        model = load_model(device)
         
         im = torch.from_numpy(resized_img).permute(2, 0, 1).unsqueeze(0).to(device)
         
@@ -92,11 +92,11 @@ def run(selected_image_key):
         pred = (pred * 255).astype("uint8")
         
         pred = np.array(resize(pred, (size[0], size[1]), anti_aliasing=True), dtype=np.uint8)                
-        pred = fct.encompasse_cornea(pred)
+        pred = encompasse_cornea(pred)
         
         segmented_image = Image.fromarray(pred)
         
-        cornea_selected = Image.fromarray(fct.Cornea_Crop(np_image, pred))
+        cornea_selected = Image.fromarray(Cornea_Crop(np_image, pred))
 
         return segmented_image, cornea_selected
     

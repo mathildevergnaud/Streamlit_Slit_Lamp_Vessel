@@ -15,7 +15,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent 
 
 VESSEL_MODEL_URL = "https://zenodo.org/records/22975963/files/vessel_model.pt?download=1"
-VESSEL_MODEL_PATH = BASE_DIR / "utils" / "cornea" / "vessel_model.pt"
+VESSEL_MODEL_PATH = BASE_DIR / "utils" / "vessel" / "vessel_model.pt"
 
 def download_if_missing(url: str, path: Path):
     if not path.exists():
@@ -29,7 +29,7 @@ def download_if_missing(url: str, path: Path):
 def load_model(device):
     download_if_missing(VESSEL_MODEL_URL, VESSEL_MODEL_PATH)
     net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/vessel/vessel_model.pt", map_location=device))
+    net.load_state_dict(torch.load(VESSEL_MODEL_PATH, map_location=device))
     net.eval()
     return net
 

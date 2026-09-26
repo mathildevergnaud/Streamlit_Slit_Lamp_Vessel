@@ -40,13 +40,27 @@ The app will be available in a localhost. ex : http://localhost:xxxx](http://loc
 
 ### Usage
 
+The streamlit has two parts "single image" and "batch processing". The first one let the user select to use an automatic segmentation (and wich segmentation) or not and then to quantify morphemetrics parameters
+
+(add images)
+
+The second part, let the user analyses multiples images in ones, at the ends it obtains .zip with the segmentations of all the images and a .csv with the morphetrics results
+
+(add images)
+
 ## Notebook 
+
+(see if i kept this part)
 
 ### Installation
 
 ## Dataset
 
+
+
 ## Modele Checkpoints
 
 https://zenodo.org/records/22975963
+
+##
 
