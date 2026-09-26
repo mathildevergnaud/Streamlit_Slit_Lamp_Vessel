@@ -8,17 +8,35 @@ import torch
 
 from monai.networks.nets import DynUNet
 
+import requests
+from pathlib import Path
+
 import cv2
 import numpy as np
 
 import utils.cornea.utils_fct as fct
 
+BASE_DIR = Path(__file__).resolve().parent 
+
+CORNEA_MODEL_URL = "https://zenodo.org/records/22975963/files/cornea_model.pt?download=1"
+CORNEA_MODEL_PATH = BASE_DIR / "utils" / "cornea" / "cornea_model.pt"
+
+def download_if_missing(url: str, path: Path):
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        r = requests.get(url, stream=True)
+        r.raise_for_status()
+        with open(path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+                
 def load_model(device):
+    download_if_missing(CORNEA_MODEL_URL, CORNEA_MODEL_PATH)
     net = build_model().to(device)
-    net.load_state_dict(torch.load("./utils/cornea/model.pt", map_location=device))
+    net.load_state_dict(torch.load(CORNEA_MODEL_PATH, map_location=device))
     net.eval()
     return net
-
+    
 def build_model():
     return DynUNet(
         spatial_dims=2,
