@@ -8,8 +8,6 @@ import skimage
 import numpy
 import PIL
 
-#from utils.quantification.create_graph import create_graph
-
 import csv
 import glob ,os
 from datetime import datetime
@@ -33,9 +31,7 @@ class vessel_caracterisation() :
         self.H = graph
 
         if area != 'eyes':
-            print(area)
 
-            #self.H = nx.Graph([(u,v,d)for (u,v,d) in  self.graph.edges(data=True) if d['quadrant']==area])
             self.H.remove_edges_from([(u,v,d) for (u,v,d) in  self.H.edges(data=True) if d['quadrant']!=area])
             self.H.remove_nodes_from(list(nx.isolates(self.H)))
 
@@ -71,12 +67,6 @@ class vessel_caracterisation() :
             index75 = median[int(len(median)*3/4)]
             index5 = median[int(len(median)*0.05)]
             index95 = median[int(len(median)*0.95)]
-
-            #print(min,max,moyen,index)
-
-            #print(index, index25, index5)
-
-            #print(float(min_v),float(max_v),float(moyen), float(index), float(index25), float(index75), float(index5),float(index95) )
 
             return float(min_v) ,float(max_v),float(moyen), float(index), float(index25), float(index75), float(index5),float(index95), float(cumul)
         
@@ -166,18 +156,11 @@ class vessel_caracterisation() :
     
     def percent_vessel(self):
 
-        #plt.imshow(self.clock_cornea.image)
-        #plt.show()
-
         countpixelcornea = countpixelwhite(self.image_clock)
         countpixelvessel = countpixelwhite(self.image)
 
-        #print('pix cornea : ',countpixelcornea, ' pix vessel : ', countpixelvessel)
-
         percent_vessel_cornea = countpixelvessel/ countpixelcornea*100
-
-        #print(percent_vessel_cornea)
-
+        
         return percent_vessel_cornea
     
     def tortuosity(self):

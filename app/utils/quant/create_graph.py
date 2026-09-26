@@ -12,13 +12,9 @@ import numpy as np
 import os
 import math
 
-#import matplotlib.pyplot as plt
-
 from utils.quant.clock_vessel import clock
 
 def position_vessel(node1, node2, graph_clock):
-
-    #print(node1, node2)
 
     midlle_vessel = [int((node1[0]+node2[0])/2), int((node1[1]+node2[1])/2)]
 
@@ -29,7 +25,7 @@ def position_vessel(node1, node2, graph_clock):
         return 'nasal'#
 
     elif graph_clock[midlle_vessel[0], midlle_vessel[1],][0] == 0 and graph_clock[midlle_vessel[0], midlle_vessel[1],][1] ==255 and graph_clock[midlle_vessel[0], midlle_vessel[1],][2] ==0 :
-        return 'bottom'#temporal
+        return 'bottom'
 
     elif graph_clock[midlle_vessel[0], midlle_vessel[1],][0] == 255 and graph_clock[midlle_vessel[0], midlle_vessel[1],][1] ==0 and graph_clock[midlle_vessel[0], midlle_vessel[1],][2] ==255 :
         return 'temporal'
@@ -182,7 +178,6 @@ class create_graph(clock):
         nodes_img, region_nodes = fine_junctions(self.skel)
         edges = fine_edges(nodes_img, self.skel,self.image,self.diameter)
 
-        #region_nodes = self.test_overlap(region_nodes)
         self.graph = nx.Graph()
 
         _nodes = []
@@ -215,7 +210,7 @@ class create_graph(clock):
                 quadrant = position_vessel(_nodes[node_links[0]][1], _nodes[node_links[1]][1], self.part_clock)
                 tor = tortuosity(len(list_in)+3, len_h )
    
-                self.graph.add_edge(node_links[0], node_links[1],len_list = (len(list_in)+3) / self.radius/0.0001, len_heur = (len_h/ self.radius/0.0001), diameter = (mean_dia / self.radius/0.0001), quadrant = quadrant, tor = tor)#, hsv = mean_hsv
+                self.graph.add_edge(node_links[0], node_links[1],len_list = (len(list_in)+3) / self.radius/0.0001, len_heur = (len_h/ self.radius/0.0001), diameter = (mean_dia / self.radius/0.0001), quadrant = quadrant, tor = tor)
                 
             id = id+1
         

@@ -19,6 +19,35 @@ import utils.cornea.utils_fct as fct
 
 import zipfile
 
+def build_zip(keys):
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for key in keys:
+            for suffix in ["_mask", "_cornea", "_vessel"]:
+                seg_key = key + suffix
+                if seg_key in st.session_state.segmentations:
+                    img = st.session_state.segmentations[seg_key]
+                    arr = np.array(img)
+                    success, encoded = cv2.imencode(".png", arr)  # fixed: was missing `arr`
+                    if success:
+                        filename = f"{os.path.splitext(key)[0]}{suffix}.png"
+                        zf.writestr(filename, encoded.tobytes())
+    buffer.seek(0)
+    return buffer
+
+def build_csv(keys):
+    all_dfs = []
+    for key in keys:
+        morpho_key = key + "_morpho"
+        if morpho_key in st.session_state.segmentations:
+            df = st.session_state.segmentations[morpho_key].reset_index()
+            df.insert(0, "image", key)
+            all_dfs.append(df)
+    if not all_dfs:
+        return None
+    combined = pd.concat(all_dfs, axis=0, ignore_index=True)
+    return combined.to_csv(index=False).encode("utf-8")
+
 def reshape_morpho(morpho_info, parts):
     # Maps a metric's suffix to its category label
     CATEGORY_MAP = {
@@ -430,29 +459,48 @@ with tab_batch:
 
         if st.session_state.get("batch_done") and st.session_state.get("batch_keys"):
 
-            def build_zip(keys):
-                buffer = io.BytesIO()
-                with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
-                    for key in keys:
-                        for suffix in ["_mask", "_cornea", "_vessel"]:
-                            seg_key = key + suffix
-                            if seg_key in st.session_state.segmentations:
-                                img = st.session_state.segmentations[seg_key]
-                                arr = np.array(img)
-                                success, encoded = cv2.imencode(".png")
-                                if success:
-                                    filename = f"{os.path.splitext(key)[0]}{suffix}.png"
-                                    zf.writestr(filename, encoded.tobytes())
-                buffer.seek(0)
-                return buffer
-
             zip_buffer = build_zip(st.session_state["batch_keys"])
 
-            st.download_button(
-                label="Download all results (ZIP)",
-                data=zip_buffer,
-                file_name="batch_segmentation_results.zip",
-                mime="application/zip",
-                key="download_batch_zip",
-            )
+            progress_quant = st.progress(0, text="Starting batch quantification...")
+
+            for i, key in enumerate(st.session_state["batch_keys"] ):
+                progress_quant.progress(
+                    (i) / len(batch_keys),
+                    text=f"Processing {key} ({i+1}/{len(batch_keys)})",
+                )
+                try:
+
+                    morpho, composite = quantif.run(key)
+                    parts = ['eyes', 'middle', 'nasal', 'bottom', 'temporal', 'top']
+                    df_morpho = reshape_morpho(morpho, parts)
+                    st.session_state.segmentations[key + "_morpho"] = df_morpho
+                    st.session_state.segmentations[key + "_composite_graph"] = composite
+                    
+                except Exception as e:
+                    errors.append((key, str(e)))
+
+            progress_quant.progress(1.0, text="Batch quantification done!")
+
+            if st.session_state.get("batch_done") and st.session_state.get("batch_keys"):
+
+                csv_bytes = build_csv(st.session_state["batch_keys"])
+                if csv_bytes:
+                    st.download_button(
+                        label="Download quantification (CSV)",
+                        data=csv_bytes,
+                        file_name="batch_quantification_results.csv",
+                        mime="text/csv",
+                        key="download_quantification_csv",
+                    )
+
+                    st.download_button(
+                        label="Download segmentation results (ZIP)",
+                        data=zip_buffer,
+                        file_name="batch_segmentation_results.zip",
+                        mime="application/zip",
+                        key="download_batch_zip",
+                    )
+                    
+                else:
+                    st.info("No quantification data available yet.")
 

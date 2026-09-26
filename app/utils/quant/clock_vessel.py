@@ -6,8 +6,6 @@ from skimage import measure
 
 import os
 
-#import math
-
 def test_in_the_midle(x, y, r , centeri, centerj):
     if  pow(x-centeri,2)+ pow(y-centerj,2) <= pow(r,2):
         return True
@@ -54,8 +52,6 @@ class clock():
             el1 = cv2.minEnclosingCircle(el)
             el2 = cv2.minEnclosingCircle(maxel)
 
-            #(el1[1], el2[1] )
-
             if el1[1] > el2[1] :
                 maxel = el
 
@@ -63,14 +59,14 @@ class clock():
             (x,y), radius = cv2.minEnclosingCircle(maxel)
             center = (int(x), int(y))
             self.radius = int(radius)
-            #print('radius', self.radius)
+ 
             cv2.circle(self.image_clock, center, self.radius, (0,255,0), 2)
 
         for i in range (self.image_clock.shape[0]):
             for j in range (self.image_clock.shape[1]):
 
                 if self.image_clock[i,j] > 0 :
-                    #print(box[2]/2)
+
                     if test_in_the_midle(j,i, (box[2]+box[3])/8 , box[2]/2+box[0], box[3]/2+box[1]) == True:
                         new_im[i,j,] = [255,0,0]
 

@@ -48,7 +48,6 @@ def func_f(x):
     if x<=0:
         return 0
     else:
-        #print(np.exp(-1/x))
         return np.exp(-1/x)
 		
 def func_g(x):
@@ -158,56 +157,16 @@ def recfin_im_2(list_im):
 
 def run(selected_image_key):
 
-	# st.write(selected_image_key)
-	
-	# st.write('Do you want to use the cornea segmentation or do you have already a mask ')
-	
-	# selected_option = st.radio(
-	# "Select an option:",
-	# ["Segmentation", "Mask"],
-	# horizontal=True )
-	
-	# st.write(f"Selected: {selected_option}")
-	#if selected_option == 'Mask':
-	# uploaded_Mask = st.file_uploader("Upload images", accept_multiple_files=False, type=["jpg", "jpeg", "png","tiff"])
-
-	# if uploaded_mask is None:
-	# 	st.info("Please upload a mask image.")
-	# 	st.stop()
-	
-	# else:
-	# 	st.write(f"Filename: {uploaded_Mask.name}")
-	# 	img = Image.open(uploaded_Mask)
-	# 	st.session_state.segmentations[selected_image_key + "_mask"] = img
-	# 	st.image(st.session_state.segmentations[selected_image_key + "_mask"], caption="Mask")
-			
-	# elif selected_option == 'Segmentation'  :
-	# 	key = selected_image_key + "_cornea"
-	# 	if key in st.session_state.segmentations:
-	# 		st.write('Cornea Segmentation Done')
-	# 		st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-	# 		st.session_state.segmentations[selected_image_key + "_mask"] = st.session_state.segmentations[selected_image_key + "_cornea"] 
-	# 	else:
-	# 		st.write('Please run cornea segmentation before')
-	# 		st.stop()
-
 	input = st.session_state.segmentations[selected_image_key + "_cornea"]
-	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]
-	#st.write('Image shape : ', input.size, 'Mask shape :', mask_in.size)			
+	mask_in = st.session_state.segmentations[selected_image_key + "_mask"]		
 	
 	input_array = np.array(input).astype(np.uint8)
 	mask_array = np.array(mask_in).astype(np.uint8)
-	#st.write('Image dtype : ', input_array.dtype, 'Mask dtype :', mask_array.dtype)
-	#st.write('Image max : ',np.max(input_array), 'Mask dtype :', np.max(mask_array))
-	
-	#st.write(mask_array.shape)
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	model = load_model(device)
 
 	imagette = cut_im_2(input_array, mask_array, device)
-
-	#st.write(len(imagette), imagette[0].shape)
 
 	outputs = []
 

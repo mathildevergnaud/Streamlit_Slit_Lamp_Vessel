@@ -43,10 +43,6 @@ def encompasse_cornea(cornea):
     return blank_image
 
 def Cornea_Crop(image, mask):
-    #st.write("Shape:", image.shape)
-    #st.write("Dtype:", image.dtype)
-    
-    #st.write(image[820,1200])
     if mask.dtype != np.uint8:
         mask = (mask > 0).astype("uint8") * 255
     return cv2.bitwise_and(image, image, mask=mask)
@@ -62,7 +58,6 @@ def run(selected_image_key):
     if selected_image_key:
         
         original_image = st.session_state.images[selected_image_key+'_or']
-        #st.image(original_image, caption="Segmented Image")
         
         np_image = np.array(original_image).astype(np.uint8)
         img_array = np.array(original_image).astype(np.float32)/255.0
@@ -84,21 +79,7 @@ def run(selected_image_key):
         segmented_image = Image.fromarray(pred)
         
         cornea_selected = Image.fromarray(fct.Cornea_Crop(np_image, pred))
-        #st.sidebar.write(np.array(original_image)[0,0], np.array(original_image).dtype, type(np.array(original_image)), pred.dtype, type(pred), pred.max())
 
         return segmented_image, cornea_selected
     
-
-
-    # st.write("Segmentation Result:")
-    # if selected_image_key and selected_image_key + "_segmented" in st.session_state.segmentations:
-    #     st.image(st.session_state.segmentations[selected_image_key + "_segmented"], caption="Segmented Image")
-    # else:
-    #     st.write("No segmentation result yet.")
-    
-    # st.write("Cornea:")
-    # if selected_image_key and selected_image_key + "_cornea" in st.session_state.segmentations:
-    #     st.image(st.session_state.segmentations[selected_image_key + "_cornea"], caption="Cornea")
-    # else:
-    #     st.write("No segmentation result yet.")
 
