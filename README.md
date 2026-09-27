@@ -5,7 +5,7 @@
 Cornea and neo-corneavascularisation segmentation and morpho-analyses from slit-lamp images
 
 <p align="center">
-<img src="readme_example/figure1bis.png" alt="Pipeline" width="400"/>
+<img src="readme_example/pipeline.png" alt="Pipeline" width="400"/>
 </p>
 
 ## Streamlit app
@@ -42,7 +42,12 @@ The app will be available in a localhost. ex : http://localhost:xxxx](http://loc
 
 The streamlit has two parts "single image" and "batch processing". The first one let the user select to use an automatic segmentation (and wich segmentation) or not and then to quantify morphemetrics parameters
 
-(add images)
+<p align="center">
+<img src="readme_example/ex_single_image.png" alt="Pipeline" width="400"/>
+</p>
+
+If the cornea and vessel mask, you need to run the segmentation before to have the quantification parts.
+
 
 The second part, let the user analyses multiples images in ones, at the ends it obtains .zip with the segmentations of all the images and a .csv with the morphetrics results
 
@@ -55,8 +60,6 @@ The second part, let the user analyses multiples images in ones, at the ends it 
 ### Installation
 
 ## Dataset
-
-
 
 ## Modele Checkpoints
 
